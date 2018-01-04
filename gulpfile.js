@@ -142,6 +142,8 @@ gulp.task('test-ci-html', ['pre-test-ci'], function () {
 
 gulp.task('build', ['initialize:feel', 'clean:src:feel', 'concat:feel', 'clean:temp']);
 
+gulp.task('generate', ['generate:parser']);
+
 gulp.task('default', ['build', 'generate', 'mocha']);
 
 gulp.task('watch', () => {

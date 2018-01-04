@@ -72,6 +72,7 @@ function ArithmeticExpressionNode(operator, operand1, operand2, loc) {
 }
 
 function SimpleExpressionsNode(simpleExpressions, loc) {
+  this.type = 'SimpleExpressions';
   this.simpleExpressions = simpleExpressions;
   this.loc = loc;
 }
@@ -89,6 +90,7 @@ function LiteralNode(value, loc) {
 }
 
 function DateTimeLiteralNode(symbol, params, loc) {
+  this.type = 'DateTimeLiteral';
   this.symbol = symbol;
   this.params = params;
   this.loc = loc;

@@ -1,7 +1,7 @@
 {
-  "name": "js-feel",
-  "version": "1.3.0",
-  "description": "FEEL(Friendly Enough Expression Language) based on DMN specification 1.1 for conformance level 3",
+  "name": "dmn-eval-js",
+  "version": "1.0.0",
+  "description": "Evaluation of DMN 1.1 decision tables, limited to S-FEEL (Simple Friendly Enough Expression Language)",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:EdgeVerve/feel.git"
+    "url": "git@github.com:HBTGmbH/dmn-eval-js.git"
   },
   "keywords": [
     "FEEL",
@@ -31,9 +31,10 @@
     "Decision Table",
     "Rule Engine"
   ],
-  "author": "Pragyan Das <pragyandas@msn.com>",
+  "author": "Andre Hegerath <andre.hegerath@hbt.de>",
   "dependencies": {
     "big.js": "^3.1.3",
+    "dmn-moddle": "^1.0.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",

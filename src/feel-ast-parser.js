@@ -93,7 +93,9 @@ module.exports = function (ast) {
     });
   };
 
-  ast.UnaryTestsNode.prototype.build = function (args) {
+  ast.UnaryTestsNode.prototype.build = function (data) {
+    const context = Object.assign({}, data, builtInFns);
+    const args = { context };
     return new Promise((resolve, reject) => {
       if (this.expr) {
         Promise.all(this.expr.map(d => d.build(args))).then((results) => {

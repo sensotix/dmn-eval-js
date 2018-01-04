@@ -71,23 +71,11 @@ Start
         }
 
 StartExpression
-	= Expression
-  / SimpleUnaryTests
+    = SimpleExpression
+    / SimpleUnaryTests
 
 Expression
-	= BoxedExpression
-	/ TextualExpression
-
-TextualExpression
-    = TxtExpa // function definition | for expression | if expression | quantified expression |
-    / TxtExpb // disjunction |
-    / TxtExpc // conjunction |
-    / TxtExpd // comparison |
-    / TxtExpe // arithmetic expression |
-    / TxtExpf // instance of |
-    / TxtExpg // path expression |
-    / TxtExph // filter expression | function invocation |
-    / TxtExpi // literal | simple positive unary test | name | "(" , textual expression , ")"
+    = SimpleExpression
 
 SimpleExpression
   = ArithmeticExpression
@@ -98,15 +86,6 @@ SimpleExpressions
         {
           return new ast.SimpleExpressionsNode(buildList(head,tail,3), location());
         }
-
-TxtExpi
-	="(" __ expr:TextualExpression __ ")"
-		{
-			return expr;
-		}
-	/ Name
-  / Literal
-	/ SimplePositiveUnaryTest
 
 //Name Start
 
@@ -323,13 +302,15 @@ ClosedIntervalEnd
 
 Endpoint
     = SimpleValue
+    / ArithmeticExpression
 
 SimpleValue
-    = QualifiedName
+    = FunctionInvocation
     / SimpleLiteral
+	/ QualifiedName
 
 QualifiedName
-    = head:Name tail: (__ "->" __ Name)*
+    = head:Name tail: (__ "." __ Name)*
         {
              return new ast.QualifiedNameNode(buildList(head,tail,3),location());
         }
@@ -384,34 +365,21 @@ PositiveUnaryTests
 UnaryTests
 	= expr:PositiveUnaryTests
 		{
-			return ast.UnaryTestsNode(expr,null,location());
+			return new ast.UnaryTestsNode(expr,null,location());
 		}
 	/ not:$NotToken __ "(" __ expr:PositiveUnaryTests __ ")"
 		{
-			return ast.UnaryTestsNode(expr,not,location());
+			return new ast.UnaryTestsNode(expr,not,location());
 		}
 	/ "-"
 		{
-		 	return ast.UnaryTestsNode(null,null,location());
+		 	return new ast.UnaryTestsNode(null,null,location());
 		}
 
 //UnaryTests End
 
-TxtExph
-	= FilterExpression
-	/ FunctionInvocation
-
-LeftExph
-	= TxtExpi
-
-FilterExpression
-    = head:LeftExph __ "[" __ tail:Expression __ "]"
-        {
-            return new ast.FilterExpressionNode(head,tail,location());
-        }
-
 FunctionInvocation
-    = fnName:LeftExph __ "(" params:(__ (NamedParameters/PositionalParameters))? __ ")"
+    = fnName:QualifiedName __ "(" params:(__ (NamedParameters/PositionalParameters))? __ ")"
         {
             return new ast.FunctionInvocationNode(fnName,extractOptional(params,1),location());
         }
@@ -423,51 +391,16 @@ NamedParameters
         }
 
 NamedParameter
-    = head:Name __ ":" __ tail:Expression
+    = head:Name __ ":" __ tail:QualifiedName
         {
              return new ast.NamedParameterNode(head,tail,location());
         }
 
 PositionalParameters
-    = head:Expression tail:(__ "," __ Expression)*
+    = head:QualifiedName tail:(__ "," __ QualifiedName)*
         {
             return new ast.PositionalParametersNode(buildList(head,tail,3),location());
         }
-
-
-TxtExpg
-	= PathExpression
-
-LeftExpg
-	= TxtExph
-	/ LeftExph
-
-PathExpression
-    = head:LeftExpg tail: (__ "." __ Expression)+
-        {
-            return new ast.PathExpressionNode(buildList(head,tail,3),location());
-        }
-
-TxtExpf
-	= InstanceOf
-
-LeftExpf
-	= TxtExpg
-	/ LeftExpg
-
-
-InstanceOf
-	= expr:LeftExpf __ $InstanceOfToken __ type:QualifiedName
-		{
-			return new ast.InstanceOfNode(expr,type,location());
-		}
-
-TxtExpe
-	= ArithmeticExpression
-
-LeftExpe
-	= TxtExpf
-	/ LeftExpf
 
 ArithmeticExpression
 	= Additive
@@ -482,7 +415,11 @@ ArithmeticNegation
         }
 
 UnaryExpression
-    = LeftExpe
+    = "(" __ expr:ArithmeticExpression __ ")"
+		{
+			return expr;
+		}
+    / SimpleValue
     / ArithmeticNegation
 
 Exponentiation
@@ -504,13 +441,6 @@ Additive
     tail:(__ $("+"/"-") __ Multiplicative)*
     { return buildBinaryExpression(head, tail, location()); }
 
-TxtExpd
-	= Comparision
-
-LeftExpd
-	= TxtExpe
-	/ LeftExpe
-
 ComparisionOperator
     = "="
     / "!="
@@ -520,144 +450,32 @@ ComparisionOperator
     / ">="
 
 Comparision
-	= head:LeftExpd tail:(__ ComparisionOperator __ LeftExpd)+
+	= head:SimpleExpression tail:(__ ComparisionOperator __ SimpleExpression)+
 	  { return buildComparisionExpression(head,tail,location()); }
-	/ head:LeftExpd __ operator:$BetweenToken __ first:LeftExpd __ and:AndToken __ second:LeftExpd
+	/ head:SimpleExpression __ operator:$BetweenToken __ first:SimpleExpression __ and:AndToken __ second:SimpleExpression
         {
             return new ast.ComparisionExpressionNode(operator,head,first,second,location());
         }
-    / head:LeftExpd __ operator:$InToken __ tail:PositiveUnaryTest
+    / head:SimpleExpression __ operator:$InToken __ tail:PositiveUnaryTest
         {
             return new ast.ComparisionExpressionNode(operator,head,tail,null,location());
         }
-    / head:LeftExpd __ operator:$InToken __ "(" __ tail:PositiveUnaryTests __ ")"
+    / head:SimpleExpression __ operator:$InToken __ "(" __ tail:PositiveUnaryTests __ ")"
         {
             return new ast.ComparisionExpressionNode(operator,head,tail,null,location());
         }
-
-TxtExpc
-	= Conjunction
-
-LeftExpc
-	= TxtExpd
-	/ LeftExpd
 
 Conjunction
-	= head:LeftExpc tail:(__ $AndToken __ LeftExpc)+
+	= head:SimpleExpression tail:(__ $AndToken __ SimpleExpression)+
 		{
 			return buildLogicalExpression(head,tail,location());
 		}
-
-TxtExpb
-	= Disjunction
-
-LeftExpb
-	= TxtExpc
-	/ LeftExpc
 
 Disjunction
-	= head:LeftExpb tail:(__ $OrToken __ LeftExpb)+
+	= head:SimpleExpression tail:(__ $OrToken __ SimpleExpression)+
 		{
 			return buildLogicalExpression(head,tail,location());
 		}
-
-TxtExpa
-	= FunctionDefinition
-	/ ForExpression
-	/ IfExpression
-	/ QuantifiedExpression
-
-LeftExpa
-	= TxtExpb
-	/ LeftExpb
-
-FunctionDefinition
-    = FunctionToken "(" params:(__ FormalParameters)? __ ")" __ body:FunctionBody
-        {
-            return new ast.FunctionDefinitionNode(extractOptional(params,1),body,location());
-        }
-
-FunctionBody
-    = extern:(ExternalToken __)? expr:Expression
-        {
-            return new ast.FunctionBodyNode(expr,extractOptional(extern,0),location());
-        }
-
-FormalParameters
-    = head:Name tail:(__ "," __ Name)*
-        {
-            return buildList(head,tail,3);
-        }
-
-ForExpression
-    = $ForToken __ head:InExpressions __ $ReturnToken __ tail:Expression
-        {
-            return new ast.ForExpressionNode(head,tail,location());
-        }
-
-InExpressions
-    = head:InExpression tail:(__ "," __ InExpression)*
-        {
-            return buildList(head,tail,3);
-        }
-
-InExpression
-    = head:Name __ InToken __ tail:Expression
-        {
-            return new ast.InExpressionNode(head,tail,location());
-        }
-
-IfExpression
-    = $IfToken __ condition:Expression __ $ThenToken __ thenExpr:Expression __ $ElseToken __ elseExpr:Expression
-        {
-            return new ast.IfExpressionNode(condition,thenExpr,elseExpr,location());
-        }
-
-QuantifiedExpression
-    = quantity:$(SomeToken/EveryToken) WhiteSpace+ head:InExpressions __ $SatisfiesToken __ tail:Expression
-        {
-            return new ast.QuantifiedExpressionNode(quantity,head,tail,location());
-        }
-
-BoxedExpression
-    = List
-    / FunctionDefinition
-    / Context
-
-List
-    = "[" __ list:ListEntries? __ "]"
-        {
-            return new ast.ListNode(list,location());
-        }
-
-ListEntries
-    = head:Expression tail:(__ "," __ Expression)*
-      {
-        return buildList(head,tail,3);
-      }
-
-Context
-    = "{" entries:(__ ContextEntries)? __ "}"
-        {
-            return new ast.ContextNode(extractOptional(entries,1),location());
-        }
-
-Key
-    = Name
-    / StringLiteral
-
-ContextEntry
-    = head:Key __ ":" __ tail:Expression
-        {
-            return new ast.ContextEntryNode(head,tail,location());
-        }
-    ;
-
-ContextEntries
-    = head:ContextEntry? tail:(__ "," __ ContextEntry)*
-        {
-            return buildList(head,tail,3);
-        }
 
 //Tokens and Whitespace Start
 
@@ -684,7 +502,6 @@ Keyword
     / NotToken
     / ForToken
     / ReturnToken
-    / InstanceOfToken
     / InToken
     / IfToken
     / ThenToken
@@ -732,7 +549,6 @@ SomeToken       =   "some"                              !NamePartChar
 EveryToken      =   "every"                             !NamePartChar
 SatisfiesToken  =   "satisfies"                         !NamePartChar
 BetweenToken    =   "between"                           !NamePartChar
-InstanceOfToken =   "instanceof"                        !NamePartChar
 FunctionToken   =   "function"                          !NamePartChar
 ExternalToken   =   "external"                          !NamePartChar
 

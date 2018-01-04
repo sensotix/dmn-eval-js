@@ -5,20 +5,16 @@
 *
 */
 
-const decisionTable = require('./utils/helper/decision-table');
-const decisionLogic = require('./utils/helper/decision-logic');
-const feel = require('./dist/feel');
-const decisionService = require('./utils/helper/decision-service');
+const decisionTable = require('./utils/helper/decision-table-xml.js');
+const dateTime = require('./utils/built-in-functions/date-time-functions');
 
-const jsFeel = {
+const dmnEvalJs = {
   decisionTable,
-  feel,
-  decisionLogic,
-  decisionService,
+  dateTime,
 };
 
-jsFeel.use = function (plugin) {
+dmnEvalJs.use = function (plugin) {
   plugin.call(this);
 };
 
-module.exports = jsFeel;
+module.exports = dmnEvalJs;
