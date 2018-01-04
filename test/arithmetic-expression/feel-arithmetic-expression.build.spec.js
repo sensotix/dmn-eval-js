@@ -24,7 +24,23 @@ describe(chalk.blue('Arithmetic expression ast parsing test'), function() {
         }).catch(err => done(err));
     });
 
-    it('Successfully builds ast from arithmetic expression', function(done) {
+    it('Successfully builds ast from simple arithmetic comparison', function(done) {
+      var text = '< a + b';
+      var _context = {
+        a: 10,
+        b: 20,
+      };
+      var parsedGrammar = FEEL.parse(text, { startRule: 'SimpleUnaryTests' });
+      parsedGrammar.build(_context).then(result => {
+        expect(result).not.to.be.undefined;
+        expect(result(29)).to.be.true;
+        expect(result(30)).to.be.false;
+        done();
+      }).catch(err => done(err));
+    });
+
+
+  it('Successfully builds ast from arithmetic expression', function(done) {
         var text = '((a + b)/c - (d + e*2))**f';
 
         var _context = {

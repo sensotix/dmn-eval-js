@@ -235,8 +235,8 @@ ClosedIntervalEnd
     = "]"
 
 Endpoint
-    = SimpleValue
-    / ArithmeticExpression
+    = ArithmeticExpression
+    / SimpleValue
 
 SimpleValue
     = FunctionInvocation

@@ -1,4 +1,4 @@
-{ 
+{
 /*
  *
  *  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
@@ -301,8 +301,8 @@ ClosedIntervalEnd
     = "]"
 
 Endpoint
-    = SimpleValue
-    / ArithmeticExpression
+    = ArithmeticExpression
+    / SimpleValue
 
 SimpleValue
     = FunctionInvocation

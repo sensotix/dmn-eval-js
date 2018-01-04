@@ -2650,9 +2650,9 @@ function peg$parse(input, options) {
       return cached.result;
     }
 
-    s0 = peg$parseSimpleValue();
+    s0 = peg$parseArithmeticExpression();
     if (s0 === peg$FAILED) {
-      s0 = peg$parseArithmeticExpression();
+      s0 = peg$parseSimpleValue();
     }
 
     peg$resultsCache[key] = { nextPos: peg$currPos, result: s0 };
@@ -6158,7 +6158,7 @@ function peg$parse(input, options) {
     return s0;
   }
 
-   
+
   /*
    *
    *  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),

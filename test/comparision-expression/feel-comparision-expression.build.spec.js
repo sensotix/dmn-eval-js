@@ -207,6 +207,18 @@ describe(chalk.blue('Comparison expression ast parsing test'), function() {
         }).catch(err => done(err));
     });
 
+    it('Successfully compare date with duration added', function(done) {
+      var text = '< date(date("2012-12-24") + duration("P1D"))';
+      var parsedGrammar = FEEL.parse(text);
+      parsedGrammar.build().then(result => {
+        expect(result(dateTime.date("2012-12-26"))).to.be.false;
+        expect(result(dateTime.date("2012-12-25"))).to.be.false;
+        expect(result(dateTime.date("2012-12-24"))).to.be.true;
+        expect(result(dateTime.date("2012-12-23"))).to.be.true;
+        done();
+      }).catch(err => done(err));
+    });
+
     it('Successfully compare time with "<"', function(done) {
         var text = '< time("T23:59:00Z")';
         var parsedGrammar = FEEL.parse(text);
