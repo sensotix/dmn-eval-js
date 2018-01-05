@@ -241,7 +241,7 @@ Endpoint
 SimpleValue
     = FunctionInvocation
     / SimpleLiteral
-	/ QualifiedName
+	  / QualifiedName
 
 QualifiedName
     = head:Name tail: (__ "." __ Name)*
@@ -331,7 +331,7 @@ NamedParameter
         }
 
 PositionalParameters
-    = head:QualifiedName tail:(__ "," __ QualifiedName)*
+    = head:SimpleExpression tail:(__ "," __ SimpleExpression)*
         {
             return new ast.PositionalParametersNode(buildList(head,tail,3),location());
         }

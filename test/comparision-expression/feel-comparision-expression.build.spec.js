@@ -336,4 +336,34 @@ describe(chalk.blue('Comparison expression ast parsing test'), function() {
         }).catch(err => done(err));
     });
 
+    it('Successfully parse and build function evaluation with simple values', function(done) {
+      var text = 'add(4, 5)';
+      var parsedGrammar = FEEL.parse(text, { startRule: 'SimpleUnaryTests' });
+      parsedGrammar.build({ add: (v1, v2) => v1 + v2}).then(result => {
+        expect(result(9)).to.be.true;
+        expect(result(10)).to.be.false;
+        done();
+      }).catch(err => done(err));
+    });
+
+    it('Successfully parse and build function evaluation with parameters', function(done) {
+      var text = 'add(a, b.c)';
+      var parsedGrammar = FEEL.parse(text, { startRule: 'SimpleUnaryTests' });
+      parsedGrammar.build({ add: (v1, v2) => v1 + v2, a: 4, b: { c: 5 }}).then(result => {
+        expect(result(9)).to.be.true;
+        expect(result(10)).to.be.false;
+        done();
+      }).catch(err => done(err));
+    });
+
+    it('Successfully parse and build function evaluation with arithmetic expressions', function(done) {
+      var text = 'add(2 + 2, (4 + 6) / 2)';
+      var parsedGrammar = FEEL.parse(text, { startRule: 'SimpleUnaryTests' });
+      parsedGrammar.build({ add: (v1, v2) => v1 + v2}).then(result => {
+        expect(result(9)).to.be.true;
+        expect(result(10)).to.be.false;
+        done();
+      }).catch(err => done(err));
+    });
+
 });

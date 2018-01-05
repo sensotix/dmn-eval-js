@@ -1,6 +1,6 @@
 {
   "name": "dmn-eval-js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Evaluation of DMN 1.1 decision tables, limited to S-FEEL (Simple Friendly Enough Expression Language)",
   "main": "index.js",
   "scripts": {
