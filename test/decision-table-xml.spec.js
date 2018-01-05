@@ -68,4 +68,28 @@ describe(chalk.blue('Parse and evaluate decision tables'), function() {
       }).catch(err => done(err));
     });
   });
+
+  it('Evaluation decision table with hit policy COLLECT', function(done) {
+    decisionTable.readDmnXml(readFile("./test/data/test-collect.dmn"), function(err, dtXml) {
+      expect(dtXml).not.to.be.undefined;
+      var decisions = decisionTable.parseDecisions(dtXml.drgElements);
+      expect(decisions['decision']).not.to.be.undefined;
+      const context = {
+        input: {
+          category: "A",
+        }
+      };
+      const result = decisionTable.evaluateDecision('decision', decisions, context);
+      expect(result).not.to.be.undefined;
+      result.then((data) => {
+        expect(data).not.to.be.undefined;
+        expect(data.length).to.equal(4);
+        expect(data[0].message).to.equal('Message 1');
+        expect(data[1].message).to.equal('Message 3');
+        expect(data[2].message).to.equal('Message 4');
+        expect(data[3].message).to.equal('Message 5');
+        done();
+      }).catch(err => done(err));
+    });
+  });
 });

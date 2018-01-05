@@ -6,7 +6,8 @@
 This implementation is based on [FEEL by EdgeVerve](https://github.com/EdgeVerve/feel). It is tailored to evaluation of 
 simple expression language (S-FEEL) for conformance level 2, plus some cherry-picked parts of FEEL.
 
-It allows to load and execute DMN decision tables from XML. DRGs are supported. Evaluation of decision tables is currently limited to those of hit policy F (FIRST).
+It allows to load and execute DMN decision tables from XML. DRGs are supported. Evaluation of decision tables is currently limited to those of hit policy FIRST (F)
+and COLLECT (C) without aggregation.
 
 # Getting Started
 

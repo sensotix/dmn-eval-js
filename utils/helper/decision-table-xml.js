@@ -14,6 +14,9 @@ function readDmnXml(xml, root, opts, callback) {
 }
 
 function parseDecisionTable(decisionTable) {
+  if ((decisionTable.hitPolicy !== 'FIRST') && (decisionTable.hitPolicy !== 'COLLECT')) {
+    throw new Error(`Unsupported hit policy ${decisionTable.hitPolicy}`);
+  }
   const parsedDecisionTable = { hitPolicy: decisionTable.hitPolicy, rules: [], inputExpressions: [], outputExpressions: [] };
   decisionTable.rule.forEach((rule, idx) => {
     const parsedRule = { number: idx + 1, input: [], inputExpressions: [], output: [], outputExpressions: [] };
@@ -143,21 +146,33 @@ async function evaluateDecision(decisionId, decisions, context, alreadyEvaluated
     }
   }
   const decisionTable = decision.decisionTable;
-  // iterate over the rules of the decision table of the requested decision, and return the output of the first matching rule
+  // iterate over the rules of the decision table of the requested decision,
+  // and either return the output of the first matching rule (hit policy FIRST)
+  // or collect the output of all matching rules (hit policy COLLECT)
+  const decisionResult = [];
   for (let i = 0; i < decisionTable.rules.length; i += 1) {
     const rule = decisionTable.rules[i];
     try {
       const ruleResult = await evaluateRule(rule, decisionTable.inputExpressions, decisionTable.outputExpressions, context); // eslint-disable-line no-await-in-loop
       if (ruleResult.matched) {
         console.log(`Result for decision "${decisionId}": ${JSON.stringify(ruleResult.output)}`);
-        return ruleResult.output;
+        decisionResult.push(ruleResult.output);
+        if (decisionTable.hitPolicy === 'FIRST') {
+          break;
+        }
       }
     } catch (err) {
       throw new Error(`Failed to evaluated rule ${rule.number} of decision ${decisionId}:  ${err}`);
     }
   }
-  console.log(`No rule matched for decision "${decisionId}"`);
-  return null;
+  if (decisionTable.hitPolicy === 'COLLECT') {
+    return decisionResult;
+  }
+  if (decisionResult.length === 0) {
+    console.log(`No rule matched for decision "${decisionId}"`);
+    return null;
+  }
+  return decisionResult[0];
 }
 
 function dumpTree(node, indent) {
@@ -171,6 +186,9 @@ function dumpTree(node, indent) {
   console.log(indent + node.type);
   if (node.not) {
     console.log(`${indent}  (not)`);
+  }
+  if (node.operator) {
+    console.log(`${indent}  ${node.operator}`);
   }
   const newIndent = `${indent}  `;
   switch (node.type) {
@@ -192,6 +210,11 @@ function dumpTree(node, indent) {
       break;
     }
     case 'Literal': console.log(newIndent + node.value); break;
+    case 'LogicalExpression': {
+      dumpTree(node.expr_1, newIndent);
+      dumpTree(node.expr_2, newIndent);
+      break;
+    }
     case 'Name': console.log(`${newIndent}"${node.nameChars}"`); break;
     case 'PathExpression': node.exprs.forEach(e => dumpTree(e, newIndent)); break;
     case 'PositionalParameters': node.params.forEach(p => dumpTree(p, newIndent)); break;
