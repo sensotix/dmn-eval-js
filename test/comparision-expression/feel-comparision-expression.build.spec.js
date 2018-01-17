@@ -203,6 +203,7 @@ describe(chalk.blue('Comparison expression ast parsing test'), function() {
             expect(result(dateTime.date("2012-12-25"))).to.be.false;
             expect(result(dateTime.date("2012-12-24"))).to.be.false;
             expect(result(dateTime.date("2012-12-23"))).to.be.true;
+            expect(result(dateTime.date("2013-11-23"))).to.be.false;
             done();
         }).catch(err => done(err));
     });
@@ -290,6 +291,7 @@ describe(chalk.blue('Comparison expression ast parsing test'), function() {
             expect(result(dateTime.date("2011-10-10"))).to.be.true;
             expect(result(dateTime.date("2011-10-09"))).to.be.false;
             expect(result(dateTime.date("2011-10-08"))).to.be.false;
+            expect(result(dateTime.date("2010-11-10"))).to.be.false;
             done();
         }).catch(err => done(err));
     });

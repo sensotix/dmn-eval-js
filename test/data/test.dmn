@@ -16,7 +16,7 @@
         <inputExpression id="inputExpression1" typeRef="date">        <text>input.testDate</text>
 </inputExpression>
       </input>
-      <output id="output1" label="Score" name="score" typeRef="integer" />
+      <output id="output1" label="Score" name="output.score" typeRef="integer" />
       <rule id="row-503089363-5">
         <inputEntry id="UnaryTests_0d1r8xq">        <text>[periodBegin .. periodEnd]</text>
 </inputEntry>

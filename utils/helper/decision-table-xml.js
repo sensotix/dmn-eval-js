@@ -3,61 +3,89 @@
 *  All Rights Reserved.
 */
 const DmnModdle = require('dmn-moddle');
+const log4js = require('@log4js-node/log4js-api');
 const feel = require('../../dist/feel');
+
+const logger = log4js.getLogger('dmn-eval-js');
 
 function createModdle(additionalPackages, options) {
   return new DmnModdle(additionalPackages, options);
 }
 
-function readDmnXml(xml, root, opts, callback) {
-  return createModdle().fromXML(xml, root, opts, callback);
+function readDmnXml(xml, opts, callback) {
+  return createModdle().fromXML(xml, 'dmn:Definitions', opts, callback);
 }
 
-function parseDecisionTable(decisionTable) {
-  if ((decisionTable.hitPolicy !== 'FIRST') && (decisionTable.hitPolicy !== 'COLLECT')) {
-    throw new Error(`Unsupported hit policy ${decisionTable.hitPolicy}`);
-  }
-  const parsedDecisionTable = { hitPolicy: decisionTable.hitPolicy, rules: [], inputExpressions: [], outputExpressions: [] };
-  decisionTable.rule.forEach((rule, idx) => {
-    const parsedRule = { number: idx + 1, input: [], inputExpressions: [], output: [], outputExpressions: [] };
-    parsedDecisionTable.rules.push(parsedRule);
-    rule.inputEntry.forEach((inputEntry) => {
-      let text = inputEntry.text;
-      if (text === '') {
-        text = '-';
-      }
-      try {
-        parsedRule.input.push(feel.parse(text, {
-          startRule: 'SimpleUnaryTests',
-        }));
-        parsedRule.inputExpressions.push(text);
-      } catch (err) {
-        throw new Error(`'Failed to parse input entry: ${text} ${err}`);
-      }
-    });
-    rule.outputEntry.forEach((outputEntry) => {
+function parseRule(rule, idx) {
+  const parsedRule = { number: idx + 1, input: [], inputValues: [], output: [], outputValues: [] };
+  rule.inputEntry.forEach((inputEntry) => {
+    let text = inputEntry.text;
+    if (text === '') {
+      text = '-';
+    }
+    try {
+      parsedRule.input.push(feel.parse(text, {
+        startRule: 'SimpleUnaryTests',
+      }));
+      parsedRule.inputValues.push(text);
+    } catch (err) {
+      throw new Error(`Failed to parse input entry: ${text} ${err}`);
+    }
+  });
+  rule.outputEntry.forEach((outputEntry) => {
+    if (!outputEntry.text) {
+      parsedRule.output.push(null);
+      parsedRule.outputValues.push(null);
+    } else {
       try {
         parsedRule.output.push(feel.parse(outputEntry.text, {
           startRule: 'SimpleExpressions',
         }));
       } catch (err) {
-        throw new Error(`'Failed to parse output entry: ${outputEntry.text} ${err}`);
+        throw new Error(`Failed to parse output entry: ${outputEntry.text} ${err}`);
       }
-      parsedRule.outputExpressions.push(outputEntry.text);
-    });
+      parsedRule.outputValues.push(outputEntry.text);
+    }
   });
+  return parsedRule;
+}
+
+function parseDecisionTable(decisionTable) {
+  if ((decisionTable.hitPolicy !== 'FIRST') && (decisionTable.hitPolicy !== 'UNIQUE')
+      && (decisionTable.hitPolicy !== 'COLLECT') && (decisionTable.hitPolicy !== 'RULE ORDER')) {
+    throw new Error(`Unsupported hit policy ${decisionTable.hitPolicy}`);
+  }
+  const parsedDecisionTable = { hitPolicy: decisionTable.hitPolicy, rules: [], inputExpressions: [], parsedInputExpressions: [], outputNames: [] };
+
+  // parse rules
+  decisionTable.rule.forEach((rule, idx) => {
+    parsedDecisionTable.rules.push(parseRule(rule, idx));
+  });
+
+  // parse input expressions
   decisionTable.input.forEach((input) => {
+    let inputExpression;
     if (input.inputExpression) {
-      parsedDecisionTable.inputExpressions.push(input.inputExpression.text);
+      inputExpression = input.inputExpression.text;
     } else if (input.inputVariable) {
-      parsedDecisionTable.inputExpressions.push(input.inputVariable);
+      inputExpression = input.inputVariable;
     } else {
       throw new Error(`'No input variable or expression set for input "${input.id}"`);
     }
+    parsedDecisionTable.inputExpressions.push(inputExpression);
+    try {
+      parsedDecisionTable.parsedInputExpressions.push(feel.parse(inputExpression, {
+        startRule: 'SimpleExpressions',
+      }));
+    } catch (err) {
+      throw new Error(`Failed to parse input expression: ${inputExpression} ${err}`);
+    }
   });
+
+  // parse output names
   decisionTable.output.forEach((output) => {
     if (output.name) {
-      parsedDecisionTable.outputExpressions.push(output.name);
+      parsedDecisionTable.outputNames.push(output.name);
     } else {
       throw new Error(`No name set for output "${output.id}"`);
     }
@@ -85,115 +113,177 @@ function parseDecisions(drgElements) {
   return parsedDecisions;
 }
 
-function resolveExpression(expression, context) {
+function resolveExpression(expression, obj) {
   const parts = expression.split('.');
-  return parts.reduce((resolved, part) => resolved[part], context);
+  return parts.reduce((resolved, part) => resolved[part], obj);
 }
 
-function setValue(expression, obj, value) {
+// Sets the given value to a nested property of the given object. The nested property is resolved from the given expression.
+// If the given nested property does not exist, it is added. If it exists, it is set (overwritten). If it exists and is
+// an array, the given value is added.
+// Examples:
+//   setOrAddValue('foo.bar', { }, 10) returns { foo: { bar: 10 } }
+//   setOrAddValue('foo.bar', { foo: { }, 10) returns { foo: { bar: 10 } }
+//   setOrAddValue('foo.bar', { foo: { bar: 9 }, 10) returns { foo: { bar: 10 } }
+//   setOrAddValue('foo.bar', { foo: { bar: [ ] }, 10) returns { foo: { bar: [ 10 ] } }
+//   setOrAddValue('foo.bar', { foo: { bar: [ 9 ] }, 10) returns { foo: { bar: [9, 10 ] } }
+function setOrAddValue(expression, obj, value) {
   const indexOfDot = expression.indexOf('.');
   if (indexOfDot < 0) {
-    obj[expression] = value; // eslint-disable-line no-param-reassign
+    if (obj[expression] && Array.isArray(obj[expression])) {
+      obj[expression].push(value); // eslint-disable-line no-param-reassign
+    } else {
+      obj[expression] = value; // eslint-disable-line no-param-reassign
+    }
   } else {
     const first = expression.substr(0, indexOfDot);
     const remainder = expression.substr(indexOfDot + 1);
-    obj[first] = setValue(remainder, {}, value); // eslint-disable-line no-param-reassign
+    if (obj[first]) {
+      setOrAddValue(remainder, obj[first], value);
+    } else {
+      obj[first] = setOrAddValue(remainder, {}, value); // eslint-disable-line no-param-reassign
+    }
   }
   return obj;
 }
 
-async function evaluateRule(rule, inputExpressions, outputExpressions, context) {
+// merge the result of the required decision into the context so that it is available as input for the requested decision
+function mergeContext(context, additionalContent) {
+  for (const prop in additionalContent) { // eslint-disable-line no-restricted-syntax
+    if (additionalContent.hasOwnProperty(prop)) {
+      const value = additionalContent[prop];
+      if ((typeof value === 'object') && (value !== null) && (context[prop] !== undefined) && (context[prop] !== null)) {
+        mergeContext(context[prop], additionalContent[prop]);
+      } else if (Array.isArray(value) && Array.isArray(context[prop])) {
+        context[prop].push(value);
+      } else {
+        context[prop] = additionalContent[prop]; // eslint-disable-line no-param-reassign
+      }
+    }
+  }
+}
+
+async function evaluateRule(rule, resolvedInputExpressions, outputNames, context) {
   for (let i = 0; i < rule.input.length; i += 1) {
     try {
       const inputFunction = await rule.input[i].build(context); // eslint-disable-line no-await-in-loop
-      const input = resolveExpression(inputExpressions[i], context);
+      const input = resolvedInputExpressions[i];
       if (!inputFunction(input)) {
         return {
           matched: false,
         };
       }
     } catch (err) {
+      logger.error(err);
       throw new Error(`Failed to evaluate expression "${rule.inputExpressions[i]}": ${err}`);
     }
   }
   const outputObject = {};
   for (let i = 0; i < rule.output.length; i += 1) {
-    const outputValue = await rule.output[i].build(context); // eslint-disable-line no-await-in-loop
-    setValue(outputExpressions[i], outputObject, outputValue[0]);
+    if (rule.output[i] !== null) {
+      const outputValue = await rule.output[i].build(context); // eslint-disable-line no-await-in-loop
+      setOrAddValue(outputNames[i], outputObject, outputValue[0]);
+    }
   }
   return { matched: true, output: outputObject };
 }
 
 async function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisions) {
-  console.log(`Evaluating decision "${decisionId}"...`);
   if (!alreadyEvaluatedDecisions) {
     alreadyEvaluatedDecisions = []; // eslint-disable-line no-param-reassign
   }
   const decision = decisions[decisionId];
+  if (decision === undefined) {
+    throw new Error(`No such decision "${decisionId}"`);
+  }
+
   // execute required decisions recursively first
   for (let i = 0; i < decision.requiredDecisions.length; i += 1) {
     const reqDecision = decision.requiredDecisions[i];
     // check if the decision was already executed, to prevent unecessary evaluations if multiple decisions require the same decision
     if (!alreadyEvaluatedDecisions[reqDecision]) {
+      logger.debug(`Need to evaluate required decision ${reqDecision}`);
       const requiredResult = await evaluateDecision(reqDecision, decisions, context, alreadyEvaluatedDecisions); // eslint-disable-line no-await-in-loop
-      // merge the result of the required decision into the context so that it is available as input for the requested decision
-      for (const prop in requiredResult) { // eslint-disable-line no-restricted-syntax
-        if (requiredResult.hasOwnProperty(prop)) {
-          context[prop] = requiredResult[prop]; // eslint-disable-line no-param-reassign
-        }
-      }
+      mergeContext(context, requiredResult);
       alreadyEvaluatedDecisions[reqDecision] = true; // eslint-disable-line no-param-reassign
     }
   }
+  logger.info(`Evaluating decision "${decisionId}"...`);
+  logger.debug(`Context: ${JSON.stringify(context)}`);
   const decisionTable = decision.decisionTable;
+
+  // resolve input expressions
+  const resolvedInputExpressions = [];
+  for (let i = 0; i < decisionTable.parsedInputExpressions.length; i += 1) {
+    const parsedInputExpression = decisionTable.parsedInputExpressions[i];
+    const plainInputExpression = decisionTable.inputExpressions[i];
+    try {
+      const resolvedInputExpression = await parsedInputExpression.build(context); // eslint-disable-line no-await-in-loop
+      resolvedInputExpressions.push(resolvedInputExpression[0]);
+    } catch (err) {
+      throw new Error(`Failed to evaluate input expression ${plainInputExpression} of decision:  ${err}`);
+    }
+  }
+
+  // initialize the result to null for each output name (hit policy FIRST or UNIQUE) or to an empty array (hit policy COLLECT or RULE ORDER)
+  const decisionResult = {};
+  decisionTable.outputNames.forEach((outputName) => {
+    if ((decisionTable.hitPolicy === 'FIRST') || (decisionTable.hitPolicy === 'UNIQUE')) {
+      setOrAddValue(outputName, decisionResult, null);
+    } else {
+      setOrAddValue(outputName, decisionResult, []);
+    }
+  });
+
   // iterate over the rules of the decision table of the requested decision,
   // and either return the output of the first matching rule (hit policy FIRST)
   // or collect the output of all matching rules (hit policy COLLECT)
-  const decisionResult = [];
+  let hasMatch = false;
   for (let i = 0; i < decisionTable.rules.length; i += 1) {
     const rule = decisionTable.rules[i];
+    let ruleResult;
     try {
-      const ruleResult = await evaluateRule(rule, decisionTable.inputExpressions, decisionTable.outputExpressions, context); // eslint-disable-line no-await-in-loop
-      if (ruleResult.matched) {
-        console.log(`Result for decision "${decisionId}": ${JSON.stringify(ruleResult.output)}`);
-        decisionResult.push(ruleResult.output);
-        if (decisionTable.hitPolicy === 'FIRST') {
-          break;
-        }
-      }
+      ruleResult = await evaluateRule(rule, resolvedInputExpressions, decisionTable.outputNames, context); // eslint-disable-line no-await-in-loop
     } catch (err) {
-      throw new Error(`Failed to evaluated rule ${rule.number} of decision ${decisionId}:  ${err}`);
+      throw new Error(`Failed to evaluate rule ${rule.number} of decision ${decisionId}:  ${err}`);
+    }
+    if (ruleResult.matched) {
+      // only one match for hit policy UNIQUE!
+      if (hasMatch && (decisionTable.hitPolicy === 'UNIQUE')) {
+        throw new Error(`Decision "${decisionId}" is not unique but hit policy is UNIQUE.`);
+      }
+      hasMatch = true;
+      logger.info(`Result for decision "${decisionId}": ${JSON.stringify(ruleResult.output)} (rule ${i + 1} matched)`);
+      decisionTable.outputNames.forEach((outputName) => {
+        const resolvedOutput = resolveExpression(outputName, ruleResult.output);
+        setOrAddValue(outputName, decisionResult, resolvedOutput);
+      });
+      if (decisionTable.hitPolicy === 'FIRST') {
+        break;
+      }
     }
   }
-  if (decisionTable.hitPolicy === 'COLLECT') {
-    return decisionResult;
-  }
-  if (decisionResult.length === 0) {
-    console.log(`No rule matched for decision "${decisionId}"`);
-    return null;
-  }
-  return decisionResult[0];
+  return decisionResult;
 }
 
 function dumpTree(node, indent) {
   if (!node) {
-    console.log('undefined');
+    logger.debug('undefined');
     return;
   }
   if (!indent) {
     indent = ''; // eslint-disable-line no-param-reassign
   }
-  console.log(indent + node.type);
+  logger.debug(indent + node.type);
   if (node.not) {
-    console.log(`${indent}  (not)`);
+    logger.debug(`${indent}  (not)`);
   }
   if (node.operator) {
-    console.log(`${indent}  ${node.operator}`);
+    logger.debug(`${indent}  ${node.operator}`);
   }
   const newIndent = `${indent}  `;
   switch (node.type) {
     case 'ArithmeticExpression': {
-      console.log(`${indent}  ${node.operator}`);
       dumpTree(node.operand_1, newIndent);
       dumpTree(node.operand_2, newIndent);
       break;
@@ -209,22 +299,16 @@ function dumpTree(node, indent) {
       dumpTree(node.endpoint, newIndent);
       break;
     }
-    case 'Literal': console.log(newIndent + node.value); break;
-    case 'LogicalExpression': {
-      dumpTree(node.expr_1, newIndent);
-      dumpTree(node.expr_2, newIndent);
-      break;
-    }
-    case 'Name': console.log(`${newIndent}"${node.nameChars}"`); break;
-    case 'PathExpression': node.exprs.forEach(e => dumpTree(e, newIndent)); break;
-    case 'PositionalParameters': node.params.forEach(p => dumpTree(p, newIndent)); break;
+    case 'Literal': logger.debug(`${newIndent}"${node.value}"`); break;
+    case 'Name': logger.debug(`${newIndent}"${node.nameChars}"`); break;
     case 'Program': dumpTree(node.body, newIndent); break;
+    case 'PositionalParameters': node.params.forEach(p => dumpTree(p, newIndent)); break;
     case 'QualifiedName': node.names.forEach(n => dumpTree(n, newIndent)); break;
     case 'SimpleExpressions': node.simpleExpressions.forEach(s => dumpTree(s, newIndent)); break;
     case 'SimplePositiveUnaryTest': dumpTree(node.operand, newIndent); break;
     case 'SimpleUnaryTestsNode': node.expr.forEach(e => dumpTree(e, newIndent)); break;
     case 'UnaryTestsNode': node.expr.forEach(e => dumpTree(e, newIndent)); break;
-    default: console.log('?');
+    default: logger.debug('?');
   }
 }
 
