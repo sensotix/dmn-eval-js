@@ -76,6 +76,8 @@ decisionTable.readDmnXml(xmlContent, function(err, dmnContent) {
 
 ## Supported content in decision tables
 
+Heads up! Undefined (in a Javascript sense) values are not supported. All variables that are referenced in input expressions, input entries, or output entries must not resolved to "undefined". If there is no value for them, they should be null, not undefined.  
+
 ### Input expressions
 
 Input expressions are commonly (qualified) names, like so:
@@ -109,6 +111,8 @@ const context = {
   };
 };
 ```
+
+Function implementation should be free of side-effects. Date and time instances that are arguments to functions are moment-js instances.
 
 ### Input entries
 
@@ -145,6 +149,8 @@ Examples (the list is *not* complete though):
 | [limit.upper, limit.lower]  | a value between the value of two given properties of object limit                                               |
 | date("2017-05-01")          | the date value Mai 1st, 2017                                                                                    |
 | duration(d)                 | the duration specified by d, which must be an ISO 8601 duration string like P3D for three days                  |
+| duration(d) * 2             | twice the duration                                                                                              |
+| duration(begin, end)        | the duration between the specified begin and end date                                                           |
 | date(begin) + duration(d)   | the date that results by adding the given duration to the given date                                            |
 | < date(begin) + duration(d) | any date before the date that results by adding the given duration to the given date                            |
 
@@ -165,14 +171,28 @@ Since output entries are expressions, not comparisons, values like the following
 
 ### Passing dates as input
 
-To create date, time, date and time, and durtion object instances as input for decision execution, do as follows: 
+To create date, time, date and time, and duration object instances as input for decision execution, do as follows: 
 
 ```
-const context = { 
-  someDate: dateTime.date('2017-03-19'),
-  someTime: dateTime['date and time']('2012-12-22T03:45:00'),
-  someTime: dateTime.time('03:45:00'),
-  someDuration: 'P1Y2M3DT4H6M6S', // one year, 2 months, 3 days, 4 hours, 5 minutes, 6 seconds
+const someJavascriptDate = new Date(...);
+
+const context = {
+
+  dateFromString: dateTime.date('2017-03-19'),
+  dateFromJavascriptDate: dateTime.date(someJavascriptDate),
+  dateFromYearMonthDay: dateTime.date(2018, 0, 1), // January 1st, 2018
+
+  timeFromString: dateTime.time('03:45:00'),
+  timeFromJavascriptDate: dateTime.time(someJavascriptDate), // only the time part is taken
+  timeFromHourMinuteSecond: dateTime.time(3, 45, 0), // same as above
+
+  dateAndTimeFromString: dateTime['date and time']('2012-12-22T03:45:00'),
+  dateAndTimeFromJavascriptDate: dateTime['date and time'](someJavascriptDate),
+  dateAndTimeFromIndividualDateAndTime: dateTime['date and time'](dateTime.date(...), dateTime.time(...)),
+
+  yearsMonthDurationFromString: dateTime.duration('P1Y2M'), // one year, 2 months (=14 months)
+  daysAndTimeDurationFromString: dateTime.duration('P3DT4H'), // 3 days, 4 hours (=76 hours)
+  durationAsDateDifference: dateTime.duration(dateTime.date(...), dateTime.date(...))
 };
 ```
 
