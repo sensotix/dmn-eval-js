@@ -3,10 +3,8 @@
 *  All Rights Reserved.
 */
 const DmnModdle = require('dmn-moddle');
-const log4js = require('@log4js-node/log4js-api');
+const logger = require('loglevel').getLogger('dmn-eval-js');
 const feel = require('../../dist/feel');
-
-const logger = log4js.getLogger('dmn-eval-js');
 
 function createModdle(additionalPackages, options) {
   return new DmnModdle(additionalPackages, options);
@@ -65,12 +63,12 @@ function parseDecisionTable(decisionTable) {
   // parse input expressions
   decisionTable.input.forEach((input) => {
     let inputExpression;
-    if (input.inputExpression) {
+    if (input.inputExpression && input.inputExpression.text) {
       inputExpression = input.inputExpression.text;
     } else if (input.inputVariable) {
       inputExpression = input.inputVariable;
     } else {
-      throw new Error(`'No input variable or expression set for input "${input.id}"`);
+      throw new Error(`No input variable or expression set for input '${input.id}'`);
     }
     parsedDecisionTable.inputExpressions.push(inputExpression);
     try {
@@ -78,7 +76,7 @@ function parseDecisionTable(decisionTable) {
         startRule: 'SimpleExpressions',
       }));
     } catch (err) {
-      throw new Error(`Failed to parse input expression: ${inputExpression} ${err}`);
+      throw new Error(`Failed to parse input expression '${inputExpression}': ${err}`);
     }
   });
 
@@ -175,7 +173,7 @@ async function evaluateRule(rule, resolvedInputExpressions, outputNames, context
       }
     } catch (err) {
       logger.error(err);
-      throw new Error(`Failed to evaluate expression "${rule.inputExpressions[i]}": ${err}`);
+      throw new Error(`Failed to evaluate expression '${rule.inputExpressions[i]}': ${err}`);
     }
   }
   const outputObject = {};

@@ -18,38 +18,22 @@ var { decisionTable, dateTime } = require('@hbtgmbh/dmn-eval-js');
 
 ## Logging
 
-dmn-eval-js uses [log4js](https://github.com/log4js-node/log4js-api) for logging. Since only the log4js API is used,
-you need to define a dependency on log4js by yourself if you want to get log output from dmn-eval-js. If you don't,
-any log statements are safely suppressed.
-
-To see log output, do as follows:
-
-In package.json:
+dmn-eval-js uses [loglevel](https://github.com/pimterry/loglevel) for logging.
+By default, warning and error messages are shown only. For additional log output,
+you need to configure a logger namend 'dmn-eval-js' as follows:
 ```
 ...
-"dependencies": {
-  ...
-  "log4js": "2.4.1",
-  ...
-},
-...
-```
-
-In your code:
-```
-...
-var log4js = require('log4js');
+var loglevel = require('loglevel');
 ...
  
-var logger = log4js.getLogger('dmn-eval-js');
-logger.level = 'debug';
+var logger = loglevel.getLogger('dmn-eval-js');
+logger.setLevel('info');
 ```
 
 With loglevel 'info', you will see a few short log statements per decision call. With log level 'debug', you will
 additionally see what input was passed to each decision call (including nested decisions in DRGs), this might be
 verbose depending on what input values you pass for decision evaluation. Use loglevel 'error' to limit log statements 
-to exceptional cases only. If you do not specify a loglevel, no output statements are shown (this is the same as
-loglevel 'off'); 
+to exceptional cases only.
 
 ## Parsing decision tables
 
@@ -94,7 +78,7 @@ const context = {
 };
 ```
 
-Input expressions are however not restricted to qualified names. You can use any expression according to S-FEEL, any
+Input expressions are however not restricted to qualified names. You can use any expression according to S-FEEL, and
 additionally even function invocations, too, like so:
 - employee.salary * 12
 - convertToUSD(employee.salary)
@@ -119,7 +103,7 @@ Function implementation should be free of side-effects. Date and time instances 
 As input entries, simple unary tests according to the DMN specification are supported, with some additions:
 
 - an endpoint can also be arithmetic expression
-- a simple values can also be function invocation
+- a simple value can also be function invocation
 - a simple literal can also be a null literal
 - a date time literal can also be "date and time"
 - brackets in arithmetic expressions are supported
