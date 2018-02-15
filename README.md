@@ -37,25 +37,35 @@ to exceptional cases only.
 
 ## Parsing decision tables
 
-dmn-eval-js parses XML content. It is up to you to obtain it, e.g. from file system or service call.
+dmn-eval-js parses DMN from XML content. It is up to you to obtain the XML content, e.g. from file system or service call.
+Parsing is asynchronous using a Promise, while evaluation (execution) of a decision is synchronous.
 
 ```
 const xmlContent = ... // wherever it may come from
-decisionTable.readDmnXml(xmlContent, function(err, dmnContent) {
-  
-  const decisions = decisionTable.parseDecisions(dmnContent.drgElements);
-  const context = {
-      // your input for decision execution goes in here
-  };
-  
-  decisionTable.evaluateDecision('decide-approval', decisions, context)
-    .then(data => {
-        // data is the output of the decision execution
-        // it is an array for hit policy COLLECT and RULE ORDER,
-        // and an object else
+ 
+decisionTable.parseDmnXml(xmlContent)
+    .then((decisions) => {
+        // DMN was successfully parsed
+        const context = {
+            // your input for decision execution goes in here
+        };
+
+        try {
+            const data = decisionTable.evaluateDecision('decide-approval', decisions, context);
+            // data is the output of the decision execution
+            // it is an array for hit policy COLLECT and RULE ORDER, and an object else
+            
+            ... // do something with the data
+            
+        } catch (err) {
+            // failed to evaluate rule, maybe the context is missing some data?
+            console.log(err)
+        };
     })
-    .catch(err => console.log(err));
-});
+    .catch(err => {
+         // failed to parse DMN XML: either invalid XML or valid XML but invalid DMN
+         console.log(err)
+    });
 ```
 
 ## Supported content in decision tables

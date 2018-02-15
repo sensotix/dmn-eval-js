@@ -694,9 +694,9 @@ function peg$parse(input, options) {
 
     s0 = peg$parseArithmeticExpression();
     if (s0 === peg$FAILED) {
-      s0 = peg$parseSimpleValue();
+      s0 = peg$parseComparison();
       if (s0 === peg$FAILED) {
-        s0 = peg$parseComparison();
+        s0 = peg$parseSimpleValue();
       }
     }
 
@@ -4403,8 +4403,12 @@ function peg$parse(input, options) {
   }
 
 
-  // initializer section start
-
+  /*
+   *
+   *  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+   *  Bangalore, India. All Rights Reserved.
+   *
+   */
   // differences to DMN 1.1 S-FEEL:
   // - endpoint can also be arithmetic expression
   // - simple value can also be function invocation
@@ -4412,6 +4416,10 @@ function peg$parse(input, options) {
   // - date time literal can also be "date and time"
   // - brackets in arithmetic expressions are supported
   // - no additional name symbols
+  // known issues:
+  // - operator precedence in arithmetic expressions is not properly interpreted (for example in a + b / c - d)
+
+  // initializer section start
 
   // ast nodes are the constructors used to construct the ast for the parsed grammar
   const ast = require('./feel-ast');
@@ -4444,6 +4452,7 @@ function peg$parse(input, options) {
     return tail && tail.length ? [...head, ...flatten(tail)].join("") : head.join("");
   }
 
+
   function buildComparisonExpression(head, tail, loc) {
     return tail.reduce((result, element) => {
       const operator = Array.isArray(element[1]) ? element[1][0] : element[1];
@@ -4451,6 +4460,7 @@ function peg$parse(input, options) {
     }, head);
   }
 
+   
 
   peg$result = peg$startRuleFunction();
 

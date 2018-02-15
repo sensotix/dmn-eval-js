@@ -38,26 +38,9 @@ function buildName(head, tail, index) {
 }
 
 
-function buildBinaryExpression(head, tail, loc) {
-  return tail.reduce((result, element) => new ast.ArithmeticExpressionNode(element[1], result, element[3], loc), head);
-}
-
-function buildComparisionExpression(head, tail, loc) {
+function buildComparisonExpression(head, tail, loc) {
   return tail.reduce((result, element) => {
     const operator = Array.isArray(element[1]) ? element[1][0] : element[1];
-    return new ast.ComparisionExpressionNode(operator, result, element[3], null, loc);
+    return new ast.ComparisonExpressionNode(operator, result, element[3], null, loc);
   }, head);
 }
-
-function buildLogicalExpression(head, tail, loc) {
-  return tail.reduce((result, element) => {
-    let operator = element[1];
-    if (operator === 'and') {
-      operator = '&&';
-    } else if (operator === 'or') {
-      operator = '||';
-    }
-    return new ast.LogicalExpressionNode(operator, result, element[3], loc);
-  }, head);
-}
-

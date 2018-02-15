@@ -111,6 +111,23 @@ function parseDecisions(drgElements) {
   return parsedDecisions;
 }
 
+function parseDmnXml(xml, opts) {
+  return new Promise((resolve, reject) => {
+    readDmnXml(xml, opts, (err, dmnContent) => {
+      if (err) {
+        reject(err);
+      } else {
+        try {
+          const decisions = parseDecisions(dmnContent.drgElements);
+          resolve(decisions);
+        } catch (err) {
+          reject(err);
+        }
+      }
+    });
+  });
+}
+
 function resolveExpression(expression, obj) {
   const parts = expression.split('.');
   return parts.reduce((resolved, part) => resolved[part], obj);
@@ -161,10 +178,10 @@ function mergeContext(context, additionalContent) {
   }
 }
 
-async function evaluateRule(rule, resolvedInputExpressions, outputNames, context) {
+function evaluateRule(rule, resolvedInputExpressions, outputNames, context) {
   for (let i = 0; i < rule.input.length; i += 1) {
     try {
-      const inputFunction = await rule.input[i].build(context); // eslint-disable-line no-await-in-loop
+      const inputFunction = rule.input[i].build(context); // eslint-disable-line no-await-in-loop
       const input = resolvedInputExpressions[i];
       if (!inputFunction(input)) {
         return {
@@ -179,14 +196,14 @@ async function evaluateRule(rule, resolvedInputExpressions, outputNames, context
   const outputObject = {};
   for (let i = 0; i < rule.output.length; i += 1) {
     if (rule.output[i] !== null) {
-      const outputValue = await rule.output[i].build(context); // eslint-disable-line no-await-in-loop
+      const outputValue = rule.output[i].build(context); // eslint-disable-line no-await-in-loop
       setOrAddValue(outputNames[i], outputObject, outputValue[0]);
     }
   }
   return { matched: true, output: outputObject };
 }
 
-async function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisions) {
+function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisions) {
   if (!alreadyEvaluatedDecisions) {
     alreadyEvaluatedDecisions = []; // eslint-disable-line no-param-reassign
   }
@@ -201,7 +218,7 @@ async function evaluateDecision(decisionId, decisions, context, alreadyEvaluated
     // check if the decision was already executed, to prevent unecessary evaluations if multiple decisions require the same decision
     if (!alreadyEvaluatedDecisions[reqDecision]) {
       logger.debug(`Need to evaluate required decision ${reqDecision}`);
-      const requiredResult = await evaluateDecision(reqDecision, decisions, context, alreadyEvaluatedDecisions); // eslint-disable-line no-await-in-loop
+      const requiredResult = evaluateDecision(reqDecision, decisions, context, alreadyEvaluatedDecisions); // eslint-disable-line no-await-in-loop
       mergeContext(context, requiredResult);
       alreadyEvaluatedDecisions[reqDecision] = true; // eslint-disable-line no-param-reassign
     }
@@ -216,7 +233,7 @@ async function evaluateDecision(decisionId, decisions, context, alreadyEvaluated
     const parsedInputExpression = decisionTable.parsedInputExpressions[i];
     const plainInputExpression = decisionTable.inputExpressions[i];
     try {
-      const resolvedInputExpression = await parsedInputExpression.build(context); // eslint-disable-line no-await-in-loop
+      const resolvedInputExpression = parsedInputExpression.build(context); // eslint-disable-line no-await-in-loop
       resolvedInputExpressions.push(resolvedInputExpression[0]);
     } catch (err) {
       throw new Error(`Failed to evaluate input expression ${plainInputExpression} of decision:  ${err}`);
@@ -241,7 +258,7 @@ async function evaluateDecision(decisionId, decisions, context, alreadyEvaluated
     const rule = decisionTable.rules[i];
     let ruleResult;
     try {
-      ruleResult = await evaluateRule(rule, resolvedInputExpressions, decisionTable.outputNames, context); // eslint-disable-line no-await-in-loop
+      ruleResult = evaluateRule(rule, resolvedInputExpressions, decisionTable.outputNames, context); // eslint-disable-line no-await-in-loop
     } catch (err) {
       throw new Error(`Failed to evaluate rule ${rule.number} of decision ${decisionId}:  ${err}`);
     }
@@ -310,4 +327,4 @@ function dumpTree(node, indent) {
   }
 }
 
-module.exports = { readDmnXml, parseDecisions, evaluateDecision, dumpTree };
+module.exports = { readDmnXml, parseDmnXml, parseDecisions, evaluateDecision, dumpTree };

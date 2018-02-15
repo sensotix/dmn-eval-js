@@ -1,6 +1,10 @@
 {
-// initializer section start
-
+/*
+ *
+ *  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+ *  Bangalore, India. All Rights Reserved.
+ *
+ */
 // differences to DMN 1.1 S-FEEL:
 // - endpoint can also be arithmetic expression
 // - simple value can also be function invocation
@@ -8,6 +12,10 @@
 // - date time literal can also be "date and time"
 // - brackets in arithmetic expressions are supported
 // - no additional name symbols
+// known issues:
+// - operator precedence in arithmetic expressions is not properly interpreted (for example in a + b / c - d)
+
+// initializer section start
 
 // ast nodes are the constructors used to construct the ast for the parsed grammar
 const ast = require('./feel-ast');
@@ -40,14 +48,15 @@ function buildName(head, tail, index) {
   return tail && tail.length ? [...head, ...flatten(tail)].join("") : head.join("");
 }
 
+
 function buildComparisonExpression(head, tail, loc) {
   return tail.reduce((result, element) => {
     const operator = Array.isArray(element[1]) ? element[1][0] : element[1];
     return new ast.ComparisonExpressionNode(operator, result, element[3], null, loc);
   }, head);
 }
-}
 
+ }
 Start
     = __ program:(ExpressionOrTests __)?
         {
@@ -72,8 +81,8 @@ ArithmeticExpression
 	/ Exponentiation
 	/ ArithmeticNegation
 	/ BrackenedArithmeticExpression
-	
-BrackenedArithmeticExpression 
+
+BrackenedArithmeticExpression
 	= "(" __ expr:ArithmeticExpression __ ")"
 	{
 		return expr;
@@ -82,9 +91,9 @@ BrackenedArithmeticExpression
 // 5.
 SimpleExpression
 	= ArithmeticExpression
-	/ SimpleValue
 	/ Comparison
-  
+	/ SimpleValue
+
 // 6.
 SimpleExpressions
 	= head:SimpleExpression tail:(__ "," __ SimpleExpression)*
@@ -99,13 +108,13 @@ SimplePositiveUnaryTest
              return new ast.SimplePositiveUnaryTestNode(extractOptional(head,0),tail,location());
         }
      / Interval
-	 
+
 UnaryOperator
     = "<="
     / ">="
     / "<"
     / ">"
-	
+
 // 8.
 Interval
     = start:IntervalStart !(IntervalStart / IntervalEnd) __ first:Endpoint __ ".." __ second:Endpoint __ end:IntervalEnd
@@ -150,7 +159,7 @@ OpenIntervalEnd
 // 12.
 ClosedIntervalEnd
     = "]"
-	
+
 // 13.
 SimplePositiveUnaryTests
 	= head: SimplePositiveUnaryTest
@@ -158,7 +167,7 @@ SimplePositiveUnaryTests
 	{
 		return buildList(head,tail,3);
 	}
-	
+
 // 14.
 SimpleUnaryTests
 	= expr:SimplePositiveUnaryTests
@@ -175,35 +184,35 @@ SimpleUnaryTests
 		}
 
 NotToken        =   "not"                               !NamePartChar
-		
+
 // 18.
 Endpoint
     = ArithmeticExpression
     / SimpleValue
-	
+
 // 19.
 SimpleValue
     = SimpleLiteral
     / FunctionInvocation
 	/ QualifiedName
 
-// 20.	
+// 20.
 QualifiedName
     = head:Name tail: (__ "." __ Name)*
         {
              return new ast.QualifiedNameNode(buildList(head,tail,3),location());
         }
-		
+
 // 21.
 Addition
     = head:NonRecursiveSimpleExpressionForArithmeticExpression
     tail:(__ $("+") __ Expression)
     { return new ast.ArithmeticExpressionNode('+', head, tail[3], location()); }
 
-NonRecursiveSimpleExpressionForArithmeticExpression	
+NonRecursiveSimpleExpressionForArithmeticExpression
 	= BrackenedArithmeticExpression
 	/ SimpleValue
-	
+
 // 22.
 Subtraction
     = head:NonRecursiveSimpleExpressionForArithmeticExpression
@@ -215,13 +224,13 @@ Multiplication
     = head:NonRecursiveSimpleExpressionForArithmeticExpression
     tail:(__ $("*" !"*") __ Expression)
     { return new ast.ArithmeticExpressionNode('*', head, tail[3], location()); }
-	
+
 // 24.
 Division
     = head:NonRecursiveSimpleExpressionForArithmeticExpression
     tail:(__ $("/") __ Expression)
     { return new ast.ArithmeticExpressionNode('/', head, tail[3], location()); }
-	
+
 // 25.
 Exponentiation
   	= head:NonRecursiveSimpleExpressionForArithmeticExpression
@@ -234,7 +243,7 @@ ArithmeticNegation
         {
 	        return new ast.ArithmeticExpressionNode('-', null, expr[1], location());
         }
-		
+
 // 27.
 Name
     = !ReservedWord head:NameStart tail:(__ (!ReservedWord) __ NamePart)*
@@ -247,7 +256,7 @@ ReservedWord
   / DateTimeKeyword
   / NullLiteral
   / BooleanLiteral
-		
+
 // 28.
 NameStart
     = head:NameStartChar tail:(NamePartChar)*
@@ -288,7 +297,7 @@ SimpleLiteral
     / BooleanLiteral
     / DateTimeLiteral
 	/ NullLiteral
-	
+
 // 34.
 StringLiteral "string"
   = '"' chars:DoubleStringCharacter* '"' {
@@ -376,14 +385,14 @@ DecimalNumber
             return integer.join("");
         }
 
-// 37.		
+// 37.
 Digit
     = [0-9]
 
 // 38.
 Digits
     = [0-9]+
-	
+
 // 39.
 DateTimeLiteral
   = symbol: DateTimeKeyword "(" __ head:Expression tail:(__ "," __ Expression)* __ ")"
@@ -402,7 +411,7 @@ DateTimeKeyword
   / "time"                        !NamePartChar
   / "date"                        !NamePartChar
   / "duration"                    !NamePartChar
-  
+
 // 51.
 Comparison
 	= head:NonRecursiveSimpleExpressionForComparison tail:(__ ComparisonOperator __ Expression)+
@@ -419,13 +428,13 @@ ComparisonOperator
     / "<="
     / $">" !"="
     / ">="
-	
+
 FunctionInvocation
     = fnName:QualifiedName __ "(" params:(__ (PositionalParameters))? __ ")"
         {
             return new ast.FunctionInvocationNode(fnName,extractOptional(params,1),location());
         }
-		
+
 PositionalParameters
     = head:Expression tail:(__ "," __ Expression)*
         {
@@ -437,12 +446,12 @@ NullLiteral
         {
             return new ast.LiteralNode(null, location());
         }
-		
+
 NullToken       =   "null"                              !NamePartChar
 
 __
     = (WhiteSpace)*
-	
+
 WhiteSpace "whitespace"
     = "\t"
     / "\v"

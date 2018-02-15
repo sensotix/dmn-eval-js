@@ -11,7 +11,7 @@ const { valueT, valueInverseT, valueDT, valueInverseDT, valueDTD, valueInverseDT
 const { date, time, 'date and time': dateandtime } = require('../built-in-functions');
 
 /*
-dateTimeComponent contains the list of properties required for comparision.
+dateTimeComponent contains the list of properties required for comparison.
 property collection is in the order of priority of check
 priority order is essential for inequality check
 for inequality check the property appearing first in the list needs to be checked first
@@ -45,7 +45,7 @@ const operatorMap = {
         } else if (x.isDateTime && y.isDateTime) {
           return valueDT(x) < valueDT(y);
         } else if (x.isTime && y.isTime) {
-          // make y with the same offset as x before comparision
+          // make y with the same offset as x before comparison
           const xOffset = x['time offset'];
           y.utcOffset(xOffset);
           return valueT(x) < valueT(y);
@@ -76,7 +76,7 @@ const operatorMap = {
         } else if (x.isDateTime && y.isDateTime) {
           return valueDT(x) <= valueDT(y);
         } else if (x.isTime && y.isTime) {
-          // make y with the same offset as x before comparision
+          // make y with the same offset as x before comparison
           const xOffset = x['time offset'];
           y.utcOffset(xOffset);
           return valueT(x) <= valueT(y);
@@ -107,7 +107,7 @@ const operatorMap = {
         } else if (x.isDateTime && y.isDateTime) {
           return valueDT(x) > valueDT(y);
         } else if (x.isTime && y.isTime) {
-          // make y with the same offset as x before comparision
+          // make y with the same offset as x before comparison
           const xOffset = x['time offset'];
           y.utcOffset(xOffset);
           return valueT(x) > valueT(y);
@@ -138,7 +138,7 @@ const operatorMap = {
         } else if (x.isDateTime && y.isDateTime) {
           return valueDT(x) >= valueDT(y);
         } else if (x.isTime && y.isTime) {
-          // make y with the same offset as x before comparision
+          // make y with the same offset as x before comparison
           const xOffset = x['time offset'];
           y.utcOffset(xOffset);
           return valueT(x) >= valueT(y);
@@ -175,12 +175,12 @@ const operatorMap = {
       } else if (x.isDate && y.isDate) {
         return checkEquality(x, y, dateTimeComponent.date); // eslint-disable-line no-use-before-define
       } else if (x.isDateTime && y.isDateTime) {
-        // make y with the same offset as x before comparision
+        // make y with the same offset as x before comparison
         const xOffset = x['time offset'];
         y.utcOffset(xOffset);
         return checkEquality(x, y, dateTimeComponent.dateandtime); // eslint-disable-line no-use-before-define
       } else if (x.isTime && y.isTime) {
-        // make y with the same offset as x before comparision
+        // make y with the same offset as x before comparison
         const xOffset = x['time offset'];
         y.utcOffset(xOffset);
         return checkEquality(x, y, dateTimeComponent.time); // eslint-disable-line no-use-before-define

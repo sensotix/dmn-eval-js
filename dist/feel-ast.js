@@ -50,13 +50,6 @@ function SimpleUnaryTestsNode(expr, not, loc) {
   this.loc = loc;
 }
 
-function UnaryTestsNode(expr, not, loc) {
-  this.type = 'UnaryTestsNode';
-  this.expr = expr;
-  this.not = not;
-  this.loc = loc;
-}
-
 function QualifiedNameNode(names, loc) {
   this.type = 'QualifiedName';
   this.names = names;
@@ -110,122 +103,18 @@ function FunctionInvocationNode(fnName, params, loc) {
   this.loc = loc;
 }
 
-function NamedParameterNode(paramName, expr, loc) {
-  this.type = 'NamedParameter';
-  this.paramName = paramName;
-  this.expr = expr;
-  this.loc = loc;
-}
-
-function NamedParametersNode(params, expr, loc) {
-  this.type = 'NamedParameters';
-  this.params = params;
-  this.loc = loc;
-}
-
 function PositionalParametersNode(params, loc) {
   this.type = 'PositionalParameters';
   this.params = params;
   this.loc = loc;
 }
 
-function PathExpressionNode(exprs, loc) {
-  this.type = 'PathExpression';
-  this.exprs = exprs;
-  this.loc = loc;
-}
-
-function ForExpressionNode(inExprs, expr, loc) {
-  this.type = 'ForExpression';
-  this.inExprs = inExprs;
-  this.expr = expr;
-  this.loc = loc;
-}
-
-function InExpressionNode(name, expr, loc) {
-  this.type = 'InExpression';
-  this.name = name;
-  this.expr = expr;
-  this.loc = loc;
-}
-
-function IfExpressionNode(condition, thenExpr, elseExpr, loc) {
-  this.type = 'IfExpression';
-  this.condition = condition;
-  this.thenExpr = thenExpr;
-  this.elseExpr = elseExpr;
-  this.loc = loc;
-}
-
-function QuantifiedExpressionNode(quantity, inExprs, expr, loc) {
-  this.type = 'QuantifiedExpression';
-  this.quantity = quantity;
-  this.inExprs = inExprs;
-  this.expr = expr;
-  this.loc = loc;
-}
-
-function LogicalExpressionNode(operator, expr1, expr2, loc) {
-  this.type = 'LogicalExpression';
-  this.operator = operator;
-  this.expr_1 = expr1;
-  this.expr_2 = expr2;
-  this.loc = loc;
-}
-
-function ComparisionExpressionNode(operator, expr1, expr2, expr3, loc) {
-  this.type = 'ComparisionExpression';
+function ComparisonExpressionNode(operator, expr1, expr2, expr3, loc) {
+  this.type = 'ComparisonExpression';
   this.operator = operator;
   this.expr_1 = expr1;
   this.expr_2 = expr2;
   this.expr_3 = expr3;
-  this.loc = loc;
-}
-
-function FilterExpressionNode(expr, filterExpr, loc) {
-  this.type = 'FilterExpression';
-  this.expr = expr;
-  this.filterExpr = filterExpr;
-  this.loc = loc;
-}
-
-function InstanceOfNode(expr, exprType, loc) {
-  this.type = 'InstanceOf';
-  this.expr = expr;
-  this.exprType = exprType;
-  this.loc = loc;
-}
-
-function ListNode(exprList, loc) {
-  this.type = 'List';
-  this.exprList = exprList;
-  this.loc = loc;
-}
-
-function FunctionDefinitionNode(formalParams, body, loc) {
-  this.type = 'FunctionDefinition';
-  this.formalParams = formalParams;
-  this.body = body;
-  this.loc = loc;
-}
-
-function FunctionBodyNode(expr, extern, loc) {
-  this.type = 'FunctionBody';
-  this.expr = expr;
-  this.extern = extern;
-  this.loc = loc;
-}
-
-function ContextNode(entries, loc) {
-  this.type = 'ContextNode';
-  this.entries = entries;
-  this.loc = loc;
-}
-
-function ContextEntryNode(key, expr, loc) {
-  this.type = 'ContextEntry';
-  this.key = key;
-  this.expr = expr;
   this.loc = loc;
 }
 
@@ -238,7 +127,6 @@ ast.IntervalEndLiteralNode = IntervalEndLiteralNode;
 ast.IntervalNode = IntervalNode;
 ast.SimplePositiveUnaryTestNode = SimplePositiveUnaryTestNode;
 ast.SimpleUnaryTestsNode = SimpleUnaryTestsNode;
-ast.UnaryTestsNode = UnaryTestsNode;
 ast.QualifiedNameNode = QualifiedNameNode;
 ast.ArithmeticExpressionNode = ArithmeticExpressionNode;
 ast.SimpleExpressionsNode = SimpleExpressionsNode;
@@ -247,23 +135,7 @@ ast.LiteralNode = LiteralNode;
 ast.DateTimeLiteralNode = DateTimeLiteralNode;
 ast.DecimalNumberNode = DecimalNumberNode;
 ast.FunctionInvocationNode = FunctionInvocationNode;
-ast.NamedParameterNode = NamedParameterNode;
-ast.NamedParametersNode = NamedParametersNode;
 ast.PositionalParametersNode = PositionalParametersNode;
-ast.PathExpressionNode = PathExpressionNode;
-ast.ForExpressionNode = ForExpressionNode;
-ast.InExpressionNode = InExpressionNode;
-ast.IfExpressionNode = IfExpressionNode;
-ast.QuantifiedExpressionNode = QuantifiedExpressionNode;
-ast.LogicalExpressionNode = LogicalExpressionNode;
-ast.ComparisionExpressionNode = ComparisionExpressionNode;
-ast.FilterExpressionNode = FilterExpressionNode;
-ast.InstanceOfNode = InstanceOfNode;
-ast.ListNode = ListNode;
-ast.FunctionDefinitionNode = FunctionDefinitionNode;
-ast.FunctionBodyNode = FunctionBodyNode;
-ast.ContextNode = ContextNode;
-ast.ContextEntryNode = ContextEntryNode;
-
+ast.ComparisonExpressionNode = ComparisonExpressionNode;
 
 module.exports = ast;
