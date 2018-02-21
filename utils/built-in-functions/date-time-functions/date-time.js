@@ -53,15 +53,22 @@ const dateAndTime = (...args) => {
   let dt;
   if (args.length === 1) {
     const arg = args[0];
-    const str = arg instanceof Date ? arg.toISOString() : arg;
-    if (typeof str === 'string') {
-      try {
-        dt = str === '' ? moment() : parseIANATz(str) || moment.parseZone(str);
-      } catch (err) {
-        throw err;
-      }
+    let str;
+    if (arg instanceof Date) {
+      str = arg.toISOString();
+    } else if (arg.isDateTime || moment.isMoment(arg)) {
+      str = arg.toISOString();
+    } else if (typeof arg === 'string') {
+      str = arg;
+    } else {
+      throw new Error(`Invalid argument for date_and_time function: ${arg}`);
     }
-    if (!dt.isValid()) {
+    try {
+      dt = str === '' ? moment() : parseIANATz(str) || moment.parseZone(str);
+    } catch (err) {
+      throw err;
+    }
+    if (!dt || !dt.isValid()) {
       throw new Error('Invalid date_and_time. This is usually caused by an invalid format. Please check the input format');
     }
   } else if (args.length === 2) {

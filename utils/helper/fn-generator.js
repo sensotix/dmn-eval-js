@@ -239,6 +239,8 @@ const operatorMap = {
         return Number(Big(x).plus(y));
       } else if (typeof x === 'string' && typeof y === 'string') {
         return x + y;
+      } else if ((typeof x === 'string' && typeof y === 'number') || (typeof x === 'number' && typeof y === 'string')) {
+        return x + y;
       } else if ((x.isDateTime || x.isDate) && (y.isDateTime || y.isDate)) {
         throw new Error(`${x.type} + ${y.type} : operation unsupported for one or more operands types`);
       } else if (x.isTime && y.isTime) {

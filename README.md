@@ -41,6 +41,8 @@ dmn-eval-js parses DMN from XML content. It is up to you to obtain the XML conte
 Parsing is asynchronous using a Promise, while evaluation (execution) of a decision is synchronous.
 
 ```
+const { decisionTable } = require('dmn-eval-js');
+ 
 const xmlContent = ... // wherever it may come from
  
 decisionTable.parseDmnXml(xmlContent)
@@ -139,8 +141,10 @@ Examples (the list is *not* complete though):
 | limit - 10                  | the same value as the limit minus 10                                                                            |
 | limit * 2                   | the same value as the limit times 2                                                                             |
 | [limit.upper, limit.lower]  | a value between the value of two given properties of object limit                                               |
-| date("2017-05-01")          | the date value Mai 1st, 2017                                                                                    |
-| duration(d)                 | the duration specified by d, which must be an ISO 8601 duration string like P3D for three days                  |
+| date("2017-05-01")          | the date value Mai 1st, 2017 (date is a built-in function)                                                      |
+| date(property)              | the date which is defined by the value of the given property, the time if cropped to 00:00:00                   |
+| date and time(property)     | the date and time which is defined by the value of the given property (date and time is a built-in function)    |
+| duration(d)                 | the duration specified by d, an ISO 8601 duration string like P3D for three days (duration is built-in either)  | 
 | duration(d) * 2             | twice the duration                                                                                              |
 | duration(begin, end)        | the duration between the specified begin and end date                                                           |
 | date(begin) + duration(d)   | the date that results by adding the given duration to the given date                                            |
@@ -184,35 +188,64 @@ If an input entry evaluates to undefined, the containing rule does not match, re
 
 If an output entry of a matching rule evaluates to undefined, the variable defined by the output name is set to undefined, if the hit policy is UNIQUE or FIRST. If the hit policy is COLLECT or RULE ORDER, the undefined output entry value is not added to the result list.   
 
+**Custom functions**
+ 
+If you cannot rule out undefined values, your custom functions should check their arguments for undefined values, and return undefined in turn if one or more of the arguments are themselves undefined.
 
 ### Passing dates as input
 
-To create date, time, date and time, and duration object instances as input for decision execution, do as follows: 
-
+As input for the following input expression, input value, or output value
 ```
-const someJavascriptDate = new Date(...);
-
+date(property)
+date and time(property)
+```
+the following property values are supported:
+```
+// ISO8601 time string
 const context = {
-
-  dateFromString: dateTime.date('2017-03-19'),
-  dateFromJavascriptDate: dateTime.date(someJavascriptDate),
-  dateFromYearMonthDay: dateTime.date(2018, 0, 1), // January 1st, 2018
-
-  timeFromString: dateTime.time('03:45:00'),
-  timeFromJavascriptDate: dateTime.time(someJavascriptDate), // only the time part is taken
-  timeFromHourMinuteSecond: dateTime.time(3, 45, 0), // same as above
-
-  dateAndTimeFromString: dateTime['date and time']('2012-12-22T03:45:00'),
-  dateAndTimeFromJavascriptDate: dateTime['date and time'](someJavascriptDate),
-  dateAndTimeFromIndividualDateAndTime: dateTime['date and time'](dateTime.date(...), dateTime.time(...)),
-
-  yearsMonthDurationFromString: dateTime.duration('P1Y2M'), // one year, 2 months (=14 months)
-  daysAndTimeDurationFromString: dateTime.duration('P3DT4H'), // 3 days, 4 hours (=76 hours)
-  durationAsDateDifference: dateTime.duration(dateTime.date(...), dateTime.date(...))
-};
+  property: '2018-03-01T00:00:00.000+01:00';
+}
+ 
+// Javascript date from numerical year, month, ... values
+const context = {
+  property: new Date(2018, 2, 1, 0, 0, 0); // note that this will be implicitly in the local time zone!
+}
+ 
+// Javascript date from string with explicit time zone
+const context = {
+  property: new Date('2018-03-01T00:00:00+01:00');
+}
+ 
+// moment-js value
+const context = {
+  property: moment.parseZone('2018-03-01T00:00:00+01:00')
+}
 ```
 
-(to come: describe how timezones are specified)
+Actually, any Date or moment-js value is fine, regardless of how you created it.
+
+Heads up! The date function crop any time part which is contained in the given Date or moment-js value.
+
+### Dates in custom functions
+
+If your custom functions take date or date and time values, these are of an internal type which is compatible with the moment-js API. Make sure not to modify them by calling moment-js operations with side effects. If needed, clone the arguments first. 
+
+If your custom functions return date or date and time values, these must be of the same internal type. The functions required to create them is exported by dmn-eval-js:
+
+```
+const { decisionTable, dateTime } = require('dmn-eval-js');
+ 
+// creates a date in the internal date format,
+// d may be a Javascript Date, a moment-js date, 
+// or an instance of the internal date format
+dateTime.date(d);
+ 
+// creates a date and time in the internal date format,
+// d may be a Javascript Date, a moment-js date,
+// or an instance of the internal date and time format
+dateTime['date and time'](d); 
+```
+   
 
 # Development
 

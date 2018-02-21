@@ -210,4 +210,12 @@ describe(chalk.blue('Arithmetic expression ast parsing test'), function() {
     expect(result.years).to.equal(1);
     expect(result.months).to.equal(1);
   });
+
+  it('should add duration to date and time with variables', function() {
+    var text = 'date and time(dt) + duration("P" + numDays + "D")';
+    var parsedGrammar = FEEL.parse(text);
+    const result = parsedGrammar.build( { dt: new Date('2018-03-01T00:00:00+01:00'), numDays: 5});
+    expect(result.isDateTime).to.be.true;
+    expect(result.toISOString()).to.equal('2018-03-05T23:00:00.000Z');
+  });
 });

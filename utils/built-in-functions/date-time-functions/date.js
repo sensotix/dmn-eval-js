@@ -65,13 +65,13 @@ const date = (...args) => {
         const dateTime = moment.parseZone(ISO);
         const datePart = dateTime.format(date_ISO_8601);
         d = moment.parseZone(`${datePart}${UTCTimePart}`);
-      } else if (arg.isDateTime) {
+      } else if (arg.isDateTime || moment.isMoment(arg)) {
         const dateTime = moment.tz(arg.format(), UTC);
         const datePart = dateTime.format(date_ISO_8601);
         d = moment.parseZone(`${datePart}${UTCTimePart}`);
       }
-      if (!d.isValid()) {
-        throw new Error('Invalid date. Parsing error while attempting to create date from date and time');
+      if (!d || !d.isValid()) {
+        throw new Error(`Invalid date. Parsing error while attempting to create date from ${arg}`);
       }
     } else {
       throw new Error('Invalid format encountered. Please specify date in one of these formats :\n- "date("2012-12-25")"\n- date_and_time object');

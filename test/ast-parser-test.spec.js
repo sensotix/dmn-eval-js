@@ -5,6 +5,7 @@
 const chalk = require('chalk');
 const chai = require('chai');
 const expect = chai.expect;
+const moment = require('moment');
 const FEEL = require('../dist/feel');
 const builtInFns = require('../utils/built-in-functions');
 
@@ -160,15 +161,54 @@ describe(chalk.blue('ast parsing tests'), function() {
     expect(result).to.equal(10);
   });
 
-  it('DateTimeLiteralNode.build', function() {
+  it('DateTimeLiteralNode.build date from string', function() {
     const text = 'date("2017-05-01")';
-    const _context = { };
     const node = FEEL.parse(text, { startRule: 'SimpleExpressions' });
     expect(node.type).to.equal('SimpleExpressions');
     const dateTimeLiteralNode = node.simpleExpressions[0];
     expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
-    const result = dateTimeLiteralNode.build({ context: Object.assign({}, context, builtInFns) });
+    const result = dateTimeLiteralNode.build({ context: Object.assign({}, {}, builtInFns) });
     expect(result.utc().format('YYYY MM DD')).to.equal('2017 05 01');
+  });
+
+  it('DateTimeLiteralNode.build date from Javascript date', function() {
+    const text = 'date(d)';
+    const node = FEEL.parse(text, { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    const result = dateTimeLiteralNode.build({ context: Object.assign({}, { d: new Date('2018-03-01T00:00:00+01:00') }, builtInFns) });
+    expect(result.utcOffset(1).format('YYYY MM DD HH mm SS')).to.equal('2018 02 28 01 00 00');
+  });
+
+  it('DateTimeLiteralNode.build date from moment-js instance', function() {
+    const text = 'date(d)';
+    const node = FEEL.parse(text, { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    const result = dateTimeLiteralNode.build({ context: Object.assign({}, { d: moment.parseZone('2018-03-01T00:00:00+01:00') }, builtInFns) });
+    expect(result.utcOffset(1).format('YYYY MM DD HH mm SS')).to.equal('2018 02 28 01 00 00');
+  });
+
+  it('DateTimeLiteralNode.build date and time from Javascript date', function() {
+    const text = 'date and time(d)';
+    const node = FEEL.parse(text, { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    const result = dateTimeLiteralNode.build({ context: Object.assign({}, { d: new Date('2018-03-01T00:00:00+01:00') }, builtInFns) });
+    expect(result.utcOffset(1).format('YYYY MM DD HH mm SS')).to.equal('2018 03 01 00 00 00');
+  });
+
+  it('DateTimeLiteralNode.build date and time from moment-js instance', function() {
+    const text = 'date and time(d)';
+    const node = FEEL.parse(text, { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    const result = dateTimeLiteralNode.build({ context: Object.assign({}, { d: moment.parseZone('2018-03-01T00:00:00+01:00') }, builtInFns) });
+    expect(result.utcOffset(1).format('YYYY MM DD HH mm SS')).to.equal('2018 03 01 00 00 00');
   });
 
   it('FunctionInvocationNode.build', function() {
