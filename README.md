@@ -6,7 +6,7 @@ dmn-eval-js is a Javascript engine to execute decision tables according to the [
 This implementation is based on [FEEL by EdgeVerve](https://github.com/EdgeVerve/feel). It is tailored to evaluation of
 simple expression language (S-FEEL), plus some cherry-picked parts of FEEL.
 
-dmn-eval-js allows to load and execute DMN decision tables from XML. DRGs are supported. Evaluation of decision tables is currently limited to those of hit policy FIRST (F), UNIQUEE (U), RULE ORDER (R), and COLLECT (C) without aggregation.
+dmn-eval-js allows to load and execute DMN decision tables from XML. DRGs are supported. Evaluation of decision tables is currently limited to those of hit policy FIRST (F), UNIQUE (U), RULE ORDER (R), and COLLECT (C) without aggregation.
 
 # Usage
 
@@ -69,8 +69,6 @@ decisionTable.parseDmnXml(xmlContent)
 ```
 
 ## Supported content in decision tables
-
-Heads up! Undefined (in a Javascript sense) values are not supported. All variables that are referenced in input expressions, input entries, or output entries must not resolved to "undefined". If there is no value for them, they should be null, not undefined.  
 
 ### Input expressions
 
@@ -161,6 +159,30 @@ Since output entries are expressions, not comparisons, values like the following
 - [1 .. 2]
 - not("A")
 - empty values (this includes the dash -)
+
+### Undefined values
+
+Since version 1.2.0, dmn-eval-js allows function and properties that are referenced by input expressions, input entries, and output entries, to be undefined or missing from the input context. The names of undefined functions and properties are logged with log level 'warn'. 
+Undefined values are handled as follows:
+
+**Evaluation of input expressions, input entries, and output entries**
+
+*Input expressions* and *output entries* evaluate to undefined if they contain a function invocation or a property which is not found in the input context, or is contained there with undefined value.
+The same holds for *input entries*, unless their value can be evaluated even without the undefined function or property. For example, the following input entry:
+```
+not('A', property)
+```
+evaluates to *false* if the input expression evaluates to 'A' even if the property cannot be resolved, because regardless of the property value, the condition will always be false.
+
+**Matching of rules**
+
+If an input expression evaluates to undefined, any rule whose corresponding input entry is not empty (neither the empty string literal nor the dash -) does *not* match, regardless of to which value (or undefined) the input entry evaluates.
+
+If an input entry evaluates to undefined, the containing rule does not match, regardless of to which value the corresponding input expression evaluates.
+
+**Decision result**
+
+If an output entry of a matching rule evaluates to undefined, the variable defined by the output name is set to undefined, if the hit policy is UNIQUE or FIRST. If the hit policy is COLLECT or RULE ORDER, the undefined output entry value is not added to the result list.   
 
 
 ### Passing dates as input

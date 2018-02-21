@@ -29,8 +29,21 @@ const typeEq = (...args) => args.reduce((acc, arg) => acc && typeof arg === acc 
 
 const presencetypeEq = (...args) => presence(...args) && typeEq(...args) && true;
 
+const anyUndefined = (x, y) => x === undefined || y === undefined;
+const getUndefined = (x, y) => {
+  if (x === undefined) {
+    return x;
+  } else if (y === undefined) {
+    return y;
+  }
+  throw new Error('Neither x nor y is undefined');
+};
+
 const operatorMap = {
   '<': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     try {
       if (presencetypeEq(x, y)) {
         if (typeof x === 'number' && typeof y === 'number') {
@@ -62,6 +75,9 @@ const operatorMap = {
     }
   }),
   '<=': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     try {
       if (presencetypeEq(x, y)) {
         if (typeof x === 'number' && typeof y === 'number') {
@@ -93,6 +109,9 @@ const operatorMap = {
     }
   }),
   '>': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     try {
       if (presencetypeEq(x, y)) {
         if (typeof x === 'number' && typeof y === 'number') {
@@ -124,6 +143,9 @@ const operatorMap = {
     }
   }),
   '>=': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     try {
       if (presencetypeEq(x, y)) {
         if (typeof x === 'number' && typeof y === 'number') {
@@ -155,12 +177,11 @@ const operatorMap = {
     }
   }),
   '==': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     try {
-      if (typeof x === 'undefined' && typeof y === 'undefined') {
-        return true;
-      } else if ((typeof x === 'undefined') !== (typeof y === 'undefined')) {
-        return false;
-      } else if (x === null && y === null) {
+      if (x === null && y === null) {
         return true;
       } else if ((x === null) !== (y === null)) {
         return false;
@@ -198,7 +219,11 @@ const operatorMap = {
   }),
   '!=': _.curry((x, y) => {
     try {
-      return !(operatorMap['=='](x, y));
+      let equalsValue = operatorMap['=='](x, y);
+      if (equalsValue !== undefined) {
+        equalsValue = !equalsValue;
+      }
+      return equalsValue;
     } catch (err) {
       throw err;
     }
@@ -206,6 +231,9 @@ const operatorMap = {
   '||': _.curry((x, y) => x || y),
   '&&': _.curry((x, y) => x && y),
   '+': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     if (presence(x, y)) {
       if (typeof x === 'number' && typeof y === 'number') {
         return Number(Big(x).plus(y));
@@ -240,6 +268,9 @@ const operatorMap = {
   }),
 
   '-': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     if (!x && y) {
       return -y;
     }
@@ -277,6 +308,9 @@ const operatorMap = {
   }),
 
   '*': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     if (presence(x, y)) {
       if (typeof x === 'number' && typeof y === 'number') {
         return Number(Big(x).times(y));
@@ -294,6 +328,9 @@ const operatorMap = {
     throw new Error(`${typeof x && x} * ${typeof y && y} : operation invalid for one or more operands types`);
   }),
   '/': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     if (presence(x, y)) {
       if (typeof x === 'number' && typeof y === 'number') {
         return Number(Big(x).div(y));
@@ -312,6 +349,9 @@ const operatorMap = {
   }),
 
   '**': _.curry((x, y) => {
+    if (anyUndefined(x, y)) {
+      return getUndefined(x, y);
+    }
     if (presence(x, y)) {
       if (typeof x === 'number' && typeof y === 'number') {
         return Number(Big(x).pow(y));

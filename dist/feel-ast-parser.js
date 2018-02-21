@@ -11,6 +11,7 @@ const fnGen = require('../utils/helper/fn-generator');
 const addKwargs = require('../utils/helper/add-kwargs');
 const builtInFns = require('../utils/built-in-functions');
 const resolveName = require('../utils/helper/name-resolution.js');
+const logger = require('loglevel').getLogger('dmn-eval-js');
 
 module.exports = function (ast) {
   ast.ProgramNode.prototype.build = function (data = {}, env = {}, type = 'output') {
@@ -63,21 +64,60 @@ module.exports = function (ast) {
       const results = this.expr.map(d => d.build(args));
       if (this.not) {
         const negResults = results.map(result => args.context.not(result));
-        return x => negResults.reduce((result, next) => result && next(x), true);
+        return x => negResults.reduce((result, next) => {
+          const nextValue = next(x);
+          /*
+          let reducedResult;
+          if (result === false) {
+            reducedResult = false;
+          } else if (result === undefined) {
+            if (nextValue === false) {
+              reducedResult = false;
+            } else {
+              reducedResult = undefined;
+            }
+          } else if (nextValue === undefined) {
+            reducedResult = undefined;
+          } else {
+            reducedResult = result && nextValue;
+          }
+          return reducedResult;
+          */
+          return (result === false || nextValue === false) ? false : ((result === undefined || nextValue === undefined) ? undefined : (result && nextValue));
+        }, true);
       }
-      return x => results.reduce((result, next) => result || next(x), false);
+      return x => results.reduce((result, next) => {
+        const nextValue = next(x);
+        return (result === true || nextValue === true) ? true : ((result === undefined || nextValue === undefined) ? undefined : (result || nextValue));
+      }, false);
     }
     return () => true;
   };
 
   ast.QualifiedNameNode.prototype.build = function (args) {
     const [first, ...remaining] = this.names;
-    const processRemaining = firstResult => remaining.map(name => name.build(null, false))
-      .reduce((prev, next) => prev[next], firstResult);
+    const buildNameNode = (name) => {
+      const result = { nameNode: name, value: name.build(null, false) };
+      return result;
+    };
+    const processRemaining = (firstResult, firstExpression) => remaining.map(buildNameNode)
+      .reduce((prev, next) => {
+        if (prev.value === undefined) {
+          return prev;
+        }
+        return { value: prev.value[next.value], expression: `${prev.expression}.${next.nameNode.nameChars}` };
+      }, { value: firstResult, expression: firstExpression });
 
     const firstResult = first.build(args);
     if (remaining.length) {
-      return processRemaining(firstResult);
+      const fullResult = processRemaining(firstResult, first.nameChars);
+      if (fullResult.value === undefined) {
+        logger.warn(`'${fullResult.expression}' resolved to undefined`);
+      }
+      return fullResult.value;
+    }
+    if (firstResult === undefined) {
+      logger.warn(`'${first.nameChars}' resolved to undefined`);
     }
     return firstResult;
   };
@@ -121,7 +161,10 @@ module.exports = function (ast) {
   ast.DateTimeLiteralNode.prototype.build = function (args) {
     const fn = args.context[this.symbol];
     const paramsResult = this.params.map(d => d.build(args));
-    const result = fn(...paramsResult);
+    let result;
+    if (!paramsResult.includes(undefined)) {
+      result = fn(...paramsResult);
+    }
     return result;
   };
 
@@ -181,7 +224,23 @@ module.exports = function (ast) {
 
     this.fnName.isResult = true;
 
-    return processFnMeta(this.fnName.build(args));
+    const fnNameResult = this.fnName.build(args);
+    let result;
+    if (fnNameResult === undefined) {
+      if (this.fnName.type === 'QualifiedName') {
+        const concatNameParts = (current, next) => {
+          if (current === '') {
+            return next;
+          }
+          return `${current}.${next}`;
+        };
+        const functionName = this.fnName.names.map(nameNode => nameNode.nameChars).reduce(concatNameParts, '');
+        logger.warn(`Undefined function '${functionName}'`);
+      }
+    } else {
+      result = processFnMeta(fnNameResult);
+    }
+    return result;
   };
 
   ast.PositionalParametersNode.prototype.build = function (args) {

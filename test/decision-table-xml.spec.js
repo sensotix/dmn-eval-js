@@ -148,4 +148,49 @@ describe(chalk.blue('Parse and evaluate decision tables'), function() {
       done();
     }).catch(err => done(err));
   });
+
+  it('Evaluation decision with input expression resolving to undefined', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-input-expression.dmn")).then(decisions => {
+      expect(decisions['decision']).not.to.be.undefined;
+      let data = decisionTable.evaluateDecision('decision', decisions, { });
+      expect(data).not.to.be.undefined;
+      expect(data.message).to.equal('other score');
+      data = decisionTable.evaluateDecision('decision', decisions, { input: { } });
+      expect(data).not.to.be.undefined;
+      expect(data.message).to.equal('other score');
+      done();
+    }).catch(err => done(err));
+  });
+
+  it('Evaluation decision with input entry resolving to undefined', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-undefined-input-entry.dmn")).then(decisions => {
+      expect(decisions['decision']).not.to.be.undefined;
+      let data = decisionTable.evaluateDecision('decision', decisions, { input: { score: 42, otherCategory: 'poor' } });
+      expect(data).not.to.be.undefined;
+      expect(data.output.category).to.equal('poor');
+      done();
+    }).catch(err => done(err));
+  });
+
+  it('Evaluation decision with output expression resolving to undefined with hit policy UNIQUE', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-undefined-output-expression.dmn")).then(decisions => {
+      expect(decisions['decision']).not.to.be.undefined;
+      data = decisionTable.evaluateDecision('decision', decisions, { input: { score: 1 } });
+      expect(data).not.to.be.undefined;
+      expect(data.output).not.to.be.undefined;
+      expect(data.output.categeory).to.be.undefined;
+      done();
+    }).catch(err => done(err));
+  });
+
+  it('Evaluation decision with output expression resolving to undefined with hit policy COLLECT', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-undefined-output-expression-collect.dmn")).then(decisions => {
+      expect(decisions['decision']).not.to.be.undefined;
+      data = decisionTable.evaluateDecision('decision', decisions, { input: { score: 3, category1: 'cat1', category3: 'cat3', otherCategory: 'other' } });
+      expect(data).not.to.be.undefined;
+      expect(data.output).not.to.be.undefined;
+      expect(data.output.categories).to.have.ordered.members([ 'cat1', 'other' ]);
+      done();
+    }).catch(err => done(err));
+  });
 });

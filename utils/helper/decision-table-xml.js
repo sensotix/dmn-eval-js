@@ -271,7 +271,9 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
       logger.info(`Result for decision "${decisionId}": ${JSON.stringify(ruleResult.output)} (rule ${i + 1} matched)`);
       decisionTable.outputNames.forEach((outputName) => {
         const resolvedOutput = resolveExpression(outputName, ruleResult.output);
-        setOrAddValue(outputName, decisionResult, resolvedOutput);
+        if (resolvedOutput !== undefined || decisionTable.hitPolicy === 'FIRST' || decisionTable.hitPolicy === 'UNIQUE') {
+          setOrAddValue(outputName, decisionResult, resolvedOutput);
+        }
       });
       if (decisionTable.hitPolicy === 'FIRST') {
         break;
