@@ -131,10 +131,10 @@ Examples (the list is *not* complete though):
 | "A"                         | the string "A"                                                                                                  |
 | "A", "B"                    | the string "A" or "B"                                                                                           |
 | true                        | the boolean value true                                                                                          |
-| -                           | any value                                                                                                       |
-|                             | any value (sams as -)                                                                                           |
-| null                        | the value null                                                                                                  |
-| not(null)                   | any value other than null                                                                                       |
+| -                           | any value, even undefined                                                                                       |
+|                             | any value, even undefined (sams as -)                                                                           |
+| null                        | the value null or undefined                                                                                     |
+| not(null)                   | any value other than null or undefined                                                                          |
 | property                    | the same value as the property (must be given in the context)                                                   |
 | object.property             | the same value as the property of the object                                                                    |
 | f(a)                        | the same value as the function evaluated with the property (function and property must be given in the context) |
@@ -166,17 +166,20 @@ Since output entries are expressions, not comparisons, values like the following
 
 ### Undefined values
 
-Since version 1.2.0, dmn-eval-js allows function and properties that are referenced by input expressions, input entries, and output entries, to be undefined or missing from the input context. The names of undefined functions and properties are logged with log level 'warn'. 
+Since version 1.2.0, dmn-eval-js allows function and properties that are referenced by input expressions, input entries, and output entries, to be undefined or missing from the input context. The names of undefined functions and properties are logged with log level 'info'. 
 Undefined values are handled as follows:
 
 **Evaluation of input expressions, input entries, and output entries**
 
-*Input expressions* and *output entries* evaluate to undefined if they contain a function invocation or a property which is not found in the input context, or is contained there with undefined value.
-The same holds for *input entries*, unless their value can be evaluated even without the undefined function or property. For example, the following input entry:
+Input expressions, input entries, and output entries evaluate to undefined if they contain a function or a property which is not found in the input context or is contained there with undefined value.
+Undefinedness cannot be compared or checked for equality: for undefined values 'a' and 'b', the expression
 ```
-not('A', property)
+a = b
 ```
-evaluates to *false* if the input expression evaluates to 'A' even if the property cannot be resolved, because regardless of the property value, the condition will always be false.
+evaluated to undefined, not to true.
+
+There is one exception though: there is a built-in function 'defined' which returns true if the given argument is neither null nor undefined, and false if the given argument is null or undefined.
+If the given argument is undefined, this is *not* logged to console, since in this case the undefinedness is expected and nothing to inform about. 
 
 **Matching of rules**
 
@@ -194,24 +197,29 @@ If you cannot rule out undefined values, your custom functions should check thei
 
 ### Passing dates as input
 
-As input for the following input expression, input value, or output value
+For input expressions, input values, or output values of the following type:
 ```
 date(property)
 date and time(property)
 ```
-the following property values are supported:
+the value of 'property' can be created in the following way:
 ```
-// ISO8601 time string
+// for dates only: date string in the format YYYY-MM-DD
 const context = {
-  property: '2018-03-01T00:00:00.000+01:00';
+  property: '2018-03-01';
 }
  
-// Javascript date from numerical year, month, ... values
+// for date and time: ISO8601 date/time string
+const context = {
+  property: '2018-03-01T14:30:00+01:00';
+}
+ 
+// Javascript date - a) from numerical year, month, ... values
 const context = {
   property: new Date(2018, 2, 1, 0, 0, 0); // note that this will be implicitly in the local time zone!
 }
  
-// Javascript date from string with explicit time zone
+// Javascript date - b) from string with explicit time zone
 const context = {
   property: new Date('2018-03-01T00:00:00+01:00');
 }
@@ -222,9 +230,11 @@ const context = {
 }
 ```
 
-Actually, any Date or moment-js value is fine, regardless of how you created it.
+Syntactically, any Date or moment-js value is fine, regardless of how you created it. 
 
-Heads up! The date function crop any time part which is contained in the given Date or moment-js value.
+:warning: Heads up! The built-in date function crops the time portion of a Javscript Date or moment-js date *after converting the date to a UTC timezone*.
+Therefore, date('2018-03-01T00:00:00.000+01:00') actually resolves to Feburary 28th, 2018, but not March 1st, 2018, since in UTC time zone the date/time
+is '2018-02-28T23:00:00.000+00:00'.
 
 ### Dates in custom functions
 

@@ -26,11 +26,11 @@ describe(chalk.blue('handle undefined values tests'), function() {
     expect(intervalNode.type).to.equal('Interval');
     let result = intervalNode.build({ context: { a: undefined } });
     expect(typeof result).to.equal('function');
-    expect(result(9)).to.be.false;
+    expect(result(9)).to.be.undefined;
     expect(result(10)).to.be.undefined;
     result = intervalNode.build({ context: { } });
     expect(typeof result).to.equal('function');
-    expect(result(9)).to.be.false;
+    expect(result(9)).to.be.undefined;
     expect(result(10)).to.be.undefined;
   });
 
@@ -54,10 +54,12 @@ describe(chalk.blue('handle undefined values tests'), function() {
     expect(typeof result).to.equal('function');
     expect(result(10)).to.be.true;
     expect(result(42)).to.be.undefined;
+    expect(result(undefined)).to.be.undefined;
     result = node.build({ a: undefined });
     expect(typeof result).to.equal('function');
     expect(result(10)).to.be.true;
     expect(result(42)).to.be.undefined;
+    expect(result(undefined)).to.be.undefined;
   });
 
   it('SimpleUnaryTestsNode (not)', function() {
@@ -67,10 +69,22 @@ describe(chalk.blue('handle undefined values tests'), function() {
     expect(typeof result).to.equal('function');
     expect(result(10)).to.be.false;
     expect(result(42)).to.be.undefined;
+    expect(result(undefined)).to.be.undefined;
     result = node.build({ });
     expect(typeof result).to.equal('function');
     expect(result(10)).to.be.false;
     expect(result(42)).to.be.undefined;
+    expect(result(undefined)).to.be.undefined;
+  });
+
+  it('SimpleUnaryTestsNode (null)', function() {
+    const node = FEEL.parse('null', { startRule: 'SimpleUnaryTests' });
+    expect(node.type).to.equal('SimpleUnaryTestsNode');
+    let result = node.build({});
+    expect(typeof result).to.equal('function');
+    expect(result(undefined)).to.be.undefined;
+    expect(result(null)).to.be.true;
+    expect(result(42)).to.be.false;
   });
 
   it('QualifiedNameNode', function() {
@@ -136,6 +150,22 @@ describe(chalk.blue('handle undefined values tests'), function() {
     expect(result).to.equal(undefined);
   });
 
+  it('FunctionInvocationNode (built-in defined)', function() {
+    const node = FEEL.parse('defined(a)', { startRule: 'SimpleUnaryTests' });
+    let result = node.build({ context: {} });
+    expect(result(false)).to.equal(true);
+    expect(result(true)).to.equal(false);
+    result = node.build({ context: { a: undefined} });
+    expect(result(false)).to.equal(true);
+    expect(result(true)).to.equal(false);
+    result = node.build({ context: { a: null} });
+    expect(result(false)).to.equal(true);
+    expect(result(true)).to.equal(false);
+    result = node.build({ context: { a: 42} });
+    expect(result(false)).to.equal(true);
+    expect(result(true)).to.equal(false);
+  });
+
   it('PositionalParametersNode.build', function() {
     const text = 'plus(a, b)';
     const _context = {
@@ -151,17 +181,6 @@ describe(chalk.blue('handle undefined values tests'), function() {
     expect(node.type).to.equal('SimpleExpressions');
     const functionInvocationNode = node.simpleExpressions[0];
     const result = functionInvocationNode.build({ context: _context });
-    expect(result).to.be.undefined;
-  });
-
-  it('ComparisonExpressionNode.build', function() {
-    const node = FEEL.parse('42 != a', { startRule: 'SimpleExpressions' });
-    expect(node.type).to.equal('SimpleExpressions');
-    const comparisonExpressionNode = node.simpleExpressions[0];
-    expect(comparisonExpressionNode.type).to.equal('ComparisonExpression');
-    let result = comparisonExpressionNode.build({ context: { a: undefined } });
-    expect(result).to.be.undefined;
-    result = comparisonExpressionNode.build({ context: { } });
     expect(result).to.be.undefined;
   });
 });

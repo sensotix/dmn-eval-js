@@ -49,7 +49,11 @@ module.exports = function (ast) {
   ast.IntervalNode.prototype.build = function (args) {
     const startpoint = this.startpoint.build(args);
     const endpoint = this.endpoint.build(args);
-    return x => this.intervalstart.build()(startpoint)(x) && this.intervalend.build()(endpoint)(x);
+    return (x) => {
+      const startValue = this.intervalstart.build()(startpoint)(x);
+      const endValue = this.intervalend.build()(endpoint)(x);
+      return startValue === undefined || endValue === undefined ? undefined : startValue && endValue;
+    };
   };
 
   ast.SimplePositiveUnaryTestNode.prototype.build = function (args) {
@@ -77,7 +81,7 @@ module.exports = function (ast) {
     return () => true;
   };
 
-  ast.QualifiedNameNode.prototype.build = function (args) {
+  ast.QualifiedNameNode.prototype.build = function (args, doNotWarnIfUndefined = false) {
     const [first, ...remaining] = this.names;
     const buildNameNode = (name) => {
       const result = { nameNode: name, value: name.build(null, false) };
@@ -95,12 +99,16 @@ module.exports = function (ast) {
     if (remaining.length) {
       const fullResult = processRemaining(firstResult, first.nameChars);
       if (fullResult.value === undefined) {
-        logger.warn(`'${fullResult.expression}' resolved to undefined`);
+        if (!doNotWarnIfUndefined) {
+          logger.info(`'${fullResult.expression}' resolved to undefined`);
+        }
       }
       return fullResult.value;
     }
     if (firstResult === undefined) {
-      logger.warn(`'${first.nameChars}' resolved to undefined`);
+      if (!doNotWarnIfUndefined) {
+        logger.info(`'${first.nameChars}' resolved to undefined`);
+      }
     }
     return firstResult;
   };
@@ -179,7 +187,8 @@ module.exports = function (ast) {
     };
 
     const processInBuiltFunction = (fnMeta) => {
-      const values = this.params.build(args);
+      const doNotWarnIfUndefined = fnMeta.name === 'defined';
+      const values = this.params.build(args, doNotWarnIfUndefined);
       if (Array.isArray(values)) {
         return fnMeta(...[...values, args.context]);
       }
@@ -209,25 +218,14 @@ module.exports = function (ast) {
 
     const fnNameResult = this.fnName.build(args);
     let result;
-    if (fnNameResult === undefined) {
-      if (this.fnName.type === 'QualifiedName') {
-        const concatNameParts = (current, next) => {
-          if (current === '') {
-            return next;
-          }
-          return `${current}.${next}`;
-        };
-        const functionName = this.fnName.names.map(nameNode => nameNode.nameChars).reduce(concatNameParts, '');
-        logger.warn(`Undefined function '${functionName}'`);
-      }
-    } else {
+    if (fnNameResult !== undefined) {
       result = processFnMeta(fnNameResult);
     }
     return result;
   };
 
-  ast.PositionalParametersNode.prototype.build = function (args) {
-    const results = this.params.map(d => d.build(args));
+  ast.PositionalParametersNode.prototype.build = function (args, doNotWarnIfUndefined = false) {
+    const results = this.params.map(d => d.build(args, doNotWarnIfUndefined));
     return results;
   };
 

@@ -161,7 +161,7 @@ describe(chalk.blue('ast parsing tests'), function() {
     expect(result).to.equal(10);
   });
 
-  it('DateTimeLiteralNode.build date from string', function() {
+  it('DateTimeLiteralNode.build date from inline string', function() {
     const text = 'date("2017-05-01")';
     const node = FEEL.parse(text, { startRule: 'SimpleExpressions' });
     expect(node.type).to.equal('SimpleExpressions');
@@ -169,6 +169,16 @@ describe(chalk.blue('ast parsing tests'), function() {
     expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
     const result = dateTimeLiteralNode.build({ context: Object.assign({}, {}, builtInFns) });
     expect(result.utc().format('YYYY MM DD')).to.equal('2017 05 01');
+  });
+
+  it('DateTimeLiteralNode.build date from string', function() {
+    const text = 'date(d)';
+    const node = FEEL.parse(text, { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    const result = dateTimeLiteralNode.build({ context: Object.assign({ d: '2018-03-01' }, {}, builtInFns) });
+    expect(result.format('YYYY MM DD HH mm SS')).to.equal('2018 03 01 00 00 00');
   });
 
   it('DateTimeLiteralNode.build date from Javascript date', function() {
