@@ -244,7 +244,7 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
   const decisionResult = {};
   decisionTable.outputNames.forEach((outputName) => {
     if ((decisionTable.hitPolicy === 'FIRST') || (decisionTable.hitPolicy === 'UNIQUE')) {
-      setOrAddValue(outputName, decisionResult, null);
+      setOrAddValue(outputName, decisionResult, undefined);
     } else {
       setOrAddValue(outputName, decisionResult, []);
     }
@@ -279,6 +279,9 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
         break;
       }
     }
+  }
+  if (!hasMatch) {
+    logger.warn(`No rule matched for decision "${decisionId}".`);
   }
   return decisionResult;
 }

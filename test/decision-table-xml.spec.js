@@ -116,6 +116,22 @@ describe(chalk.blue('Parse and evaluate decision tables'), function() {
     }).catch(err => done(err));
   });
 
+  it.only('Return undefined if no rule matches', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-no-matching-rule.dmn")).then(decisions => {
+      expect(decisions['decision']).not.to.be.undefined;
+      const context = {
+        input: {
+          category: "D",
+        }
+      };
+      const data = decisionTable.evaluateDecision('decision', decisions, context);
+      expect(data).not.to.be.undefined;
+      expect(data.message).to.be.undefined;
+      done();
+    }).catch(err => done(err));
+  });
+
+
   it('Enforce uniqueness for hit policy UNIQUE', function(done) {
     decisionTable.parseDmnXml(readFile("./test/data/test-unique.dmn")).then(decisions => {
       expect(decisions['decision']).not.to.be.undefined;

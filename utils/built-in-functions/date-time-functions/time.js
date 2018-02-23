@@ -94,26 +94,29 @@ const parseIANATz = (str) => {
 
 const time = (...args) => {
   let t;
+  let result;
   if (args.length === 1) {
     const arg = args[0];
-    if (typeof arg === 'string') {
-      try {
-        t = arg === '' ? moment() : parseIANATz(arg) || parseTime(arg);
-      } catch (err) {
-        throw err;
+    if (arg !== null && arg !== undefined) {
+      if (typeof arg === 'string') {
+        try {
+          t = arg === '' ? moment() : parseIANATz(arg) || parseTime(arg);
+        } catch (err) {
+          throw err;
+        }
+      } else if (typeof arg === 'object') {
+        if (arg instanceof Date) {
+          t = moment.parseZone(arg.toISOString);
+        } else if (arg.isDateTime) {
+          const str = arg.format(time_ISO_8601);
+          t = moment.parseZone(str, time_ISO_8601);
+        }
+        if (!t.isValid()) {
+          throw new Error('Invalid time. Parsing error while attempting to extract time from date and time.');
+        }
+      } else {
+        throw new Error('Invalid format encountered. Please specify time in one of these formats :\n- "23:59:00z"\n- "00:01:00@Etc/UTC"\n- date_and_time object');
       }
-    } else if (typeof arg === 'object') {
-      if (arg instanceof Date) {
-        t = moment.parseZone(arg.toISOString);
-      } else if (arg.isDateTime) {
-        const str = arg.format(time_ISO_8601);
-        t = moment.parseZone(str, time_ISO_8601);
-      }
-      if (!t.isValid()) {
-        throw new Error('Invalid time. Parsing error while attempting to extract time from date and time.');
-      }
-    } else {
-      throw new Error('Invalid format encountered. Please specify time in one of these formats :\n- "23:59:00z"\n- "00:01:00@Etc/UTC"\n- date_and_time object');
     }
   } else if (args.length >= 3 && isNumber(args.slice(0, 3))) {
     const [hour, minute, second] = args.slice(0, 3);
@@ -135,7 +138,10 @@ const time = (...args) => {
     throw new Error('Invalid number of arguments specified with "time" in-built function');
   }
 
-  return addProperties(t, props);
+  if (t !== undefined) {
+    result = addProperties(t, props);
+  }
+  return result;
 };
 
 module.exports = { time };

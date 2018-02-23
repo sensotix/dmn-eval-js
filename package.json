@@ -1,6 +1,6 @@
 {
   "name": "@hbtgmbh/dmn-eval-js",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Evaluation of DMN 1.1 decision tables, limited to S-FEEL (Simple Friendly Enough Expression Language)",
   "license": "MIT",
   "main": "index.js",
@@ -23,14 +23,13 @@
     "url": "git@github.com:HBTGmbH/dmn-eval-js.git"
   },
   "keywords": [
-    "FEEL",
     "DMN 1.1",
-    "Expression",
-    "Language",
-    "PEG",
-    "PEGjs",
-    "Decision Table",
-    "Rule Engine"
+    "FEEL",
+    "S-FEEL",
+    "Rule",
+    "Rule Engine",
+    "Decision",
+    "Decision Table"
   ],
   "author": "Andre Hegerath <andre.hegerath@hbt.de>",
   "dependencies": {

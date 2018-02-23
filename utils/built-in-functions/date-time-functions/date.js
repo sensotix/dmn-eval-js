@@ -51,30 +51,33 @@ const parseDate = (str) => {
 
 const date = (...args) => {
   let d;
+  let result;
   if (args.length === 1) {
     const arg = args[0];
-    if (typeof arg === 'string') {
-      try {
-        d = arg === '' ? moment.parseZone(UTCTimePart, time_ISO_8601) : parseDate(arg);
-      } catch (err) {
-        throw err;
+    if (arg !== null && arg !== undefined) {
+      if (typeof arg === 'string') {
+        try {
+          d = arg === '' ? moment.parseZone(UTCTimePart, time_ISO_8601) : parseDate(arg);
+        } catch (err) {
+          throw err;
+        }
+      } else if (typeof arg === 'object') {
+        if (arg instanceof Date) {
+          const ISO = arg.toISOString();
+          const dateTime = moment.parseZone(ISO);
+          const datePart = dateTime.format(date_ISO_8601);
+          d = moment.parseZone(`${datePart}${UTCTimePart}`);
+        } else if (arg.isDateTime || moment.isMoment(arg)) {
+          const dateTime = moment.tz(arg.format(), UTC);
+          const datePart = dateTime.format(date_ISO_8601);
+          d = moment.parseZone(`${datePart}${UTCTimePart}`);
+        }
+        if (!d || !d.isValid()) {
+          throw new Error(`Invalid date. Parsing error while attempting to create date from ${arg}`);
+        }
+      } else {
+        throw new Error('Invalid format encountered. Please specify date in one of these formats :\n- "date("2012-12-25")"\n- date_and_time object');
       }
-    } else if (typeof arg === 'object') {
-      if (arg instanceof Date) {
-        const ISO = arg.toISOString();
-        const dateTime = moment.parseZone(ISO);
-        const datePart = dateTime.format(date_ISO_8601);
-        d = moment.parseZone(`${datePart}${UTCTimePart}`);
-      } else if (arg.isDateTime || moment.isMoment(arg)) {
-        const dateTime = moment.tz(arg.format(), UTC);
-        const datePart = dateTime.format(date_ISO_8601);
-        d = moment.parseZone(`${datePart}${UTCTimePart}`);
-      }
-      if (!d || !d.isValid()) {
-        throw new Error(`Invalid date. Parsing error while attempting to create date from ${arg}`);
-      }
-    } else {
-      throw new Error('Invalid format encountered. Please specify date in one of these formats :\n- "date("2012-12-25")"\n- date_and_time object');
     }
   } else if (args.length === 3 && isNumber(args)) {
     const [year, month, day] = args;
@@ -86,7 +89,10 @@ const date = (...args) => {
     throw new Error('Invalid number of arguments specified with "date" in-built function');
   }
 
-  return addProperties(d, props);
+  if (d !== undefined) {
+    result = addProperties(d, props);
+  }
+  return result;
 };
 
 module.exports = { date };

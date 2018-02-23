@@ -56,6 +56,7 @@ decisionTable.parseDmnXml(xmlContent)
             const data = decisionTable.evaluateDecision('decide-approval', decisions, context);
             // data is the output of the decision execution
             // it is an array for hit policy COLLECT and RULE ORDER, and an object else
+            // it is undefined if no rule matched
             
             ... // do something with the data
             

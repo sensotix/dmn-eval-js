@@ -100,14 +100,14 @@ module.exports = function (ast) {
       const fullResult = processRemaining(firstResult, first.nameChars);
       if (fullResult.value === undefined) {
         if (!doNotWarnIfUndefined) {
-          logger.warn(`'${fullResult.expression}' resolved to undefined`);
+          logger.info(`'${fullResult.expression}' resolved to undefined`);
         }
       }
       return fullResult.value;
     }
     if (firstResult === undefined) {
       if (!doNotWarnIfUndefined) {
-        logger.warn(`'${first.nameChars}' resolved to undefined`);
+        logger.info(`'${first.nameChars}' resolved to undefined`);
       }
     }
     return firstResult;

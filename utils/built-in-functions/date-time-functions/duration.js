@@ -76,23 +76,30 @@ const yearsAndMonthsDuration = (...args) => {
 const patternMatch = (arg, pattern) => arg.match(pattern).slice(1).reduce((recur, next) => recur || Boolean(next), false);
 
 const duration = (arg) => {
-  if (typeof arg === 'string') {
-    if (patternMatch(arg, ymd_ISO_8601)) {
-      try {
-        return yearsAndMonthsDuration(arg);
-      } catch (err) {
-        throw err;
+  let result;
+  if (arg !== null && arg !== undefined) {
+    if (typeof arg === 'string') {
+      if (patternMatch(arg, ymd_ISO_8601)) {
+        try {
+          result = yearsAndMonthsDuration(arg);
+        } catch (err) {
+          throw err;
+        }
+      } else if (patternMatch(arg, dtd_ISO_8601)) {
+        try {
+          result = daysAndTimeDuration(arg);
+        } catch (err) {
+          throw err;
+        }
       }
-    } else if (patternMatch(arg, dtd_ISO_8601)) {
-      try {
-        return daysAndTimeDuration(arg);
-      } catch (err) {
-        throw err;
+      if (result === undefined) {
+        throw new Error('Invalid Format : "duration" built-in function. Please check the input format');
       }
+    } else {
+      throw new Error(`Type Error : "duration" built-in function expects a string but "${typeof arg}" encountered`);
     }
-    throw new Error('Invalid Format : "duration" built-in function. Please check the input format');
   }
-  throw new Error(`Type Error : "duration" built-in function expects a string but "${typeof arg}" encountered`);
+  return result;
 };
 
 

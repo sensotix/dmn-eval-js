@@ -126,7 +126,7 @@ describe(chalk.blue('handle undefined values tests'), function() {
     expect(result).to.equal(undefined);
   });
 
-  it('DateTimeLiteralNode', function() {
+  it('DateTimeLiteralNode (date, undefined)', function() {
     const node = FEEL.parse('date(a)', { startRule: 'SimpleExpressions' });
     expect(node.type).to.equal('SimpleExpressions');
     const dateTimeLiteralNode = node.simpleExpressions[0];
@@ -134,6 +134,75 @@ describe(chalk.blue('handle undefined values tests'), function() {
     let result = dateTimeLiteralNode.build({ context: Object.assign({}, { }, builtInFns) });
     expect(result).to.be.undefined;
     result = dateTimeLiteralNode.build({ context: Object.assign({}, { a: undefined }, builtInFns) });
+    expect(result).to.be.undefined;
+  });
+
+  it('DateTimeLiteralNode (date, null)', function() {
+    const node = FEEL.parse('date(a)', { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    let result = dateTimeLiteralNode.build({ context: Object.assign({}, { a: null }, builtInFns) });
+    expect(result).to.be.undefined;
+  });
+
+  it('DateTimeLiteralNode (date and time, undefined)', function() {
+    const node = FEEL.parse('date and time(a)', { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    let result = dateTimeLiteralNode.build({ context: Object.assign({}, { }, builtInFns) });
+    expect(result).to.be.undefined;
+    result = dateTimeLiteralNode.build({ context: Object.assign({}, { a: undefined }, builtInFns) });
+    expect(result).to.be.undefined;
+  });
+
+  it('DateTimeLiteralNode (date and time, null)', function() {
+    const node = FEEL.parse('date and time(a)', { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    let result = dateTimeLiteralNode.build({ context: Object.assign({}, { a: null }, builtInFns) });
+    expect(result).to.be.undefined;
+  });
+
+  it('DateTimeLiteralNode (time, undefined)', function() {
+    const node = FEEL.parse('time(a)', { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    let result = dateTimeLiteralNode.build({ context: Object.assign({}, { }, builtInFns) });
+    expect(result).to.be.undefined;
+    result = dateTimeLiteralNode.build({ context: Object.assign({}, { a: undefined }, builtInFns) });
+    expect(result).to.be.undefined;
+  });
+
+  it('DateTimeLiteralNode (time, null)', function() {
+    const node = FEEL.parse('time(a)', { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    let result = dateTimeLiteralNode.build({ context: Object.assign({}, { a: null }, builtInFns) });
+    expect(result).to.be.undefined;
+  });
+
+  it('DateTimeLiteralNode (duration, undefined)', function() {
+    const node = FEEL.parse('duration(a)', { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    let result = dateTimeLiteralNode.build({ context: Object.assign({}, { }, builtInFns) });
+    expect(result).to.be.undefined;
+    result = dateTimeLiteralNode.build({ context: Object.assign({}, { a: undefined }, builtInFns) });
+    expect(result).to.be.undefined;
+  });
+
+  it('DateTimeLiteralNode (duration, null)', function() {
+    const node = FEEL.parse('duration(a)', { startRule: 'SimpleExpressions' });
+    expect(node.type).to.equal('SimpleExpressions');
+    const dateTimeLiteralNode = node.simpleExpressions[0];
+    expect(dateTimeLiteralNode.type).to.equal('DateTimeLiteral');
+    let result = dateTimeLiteralNode.build({ context: Object.assign({}, { a: null }, builtInFns) });
     expect(result).to.be.undefined;
   });
 

@@ -51,25 +51,28 @@ const parseIANATz = (str) => {
 
 const dateAndTime = (...args) => {
   let dt;
+  let result;
   if (args.length === 1) {
     const arg = args[0];
-    let str;
-    if (arg instanceof Date) {
-      str = arg.toISOString();
-    } else if (arg.isDateTime || moment.isMoment(arg)) {
-      str = arg.toISOString();
-    } else if (typeof arg === 'string') {
-      str = arg;
-    } else {
-      throw new Error(`Invalid argument for date_and_time function: ${arg}`);
-    }
-    try {
-      dt = str === '' ? moment() : parseIANATz(str) || moment.parseZone(str);
-    } catch (err) {
-      throw err;
-    }
-    if (!dt || !dt.isValid()) {
-      throw new Error('Invalid date_and_time. This is usually caused by an invalid format. Please check the input format');
+    if (arg !== null && arg !== undefined) {
+      let str;
+      if (arg instanceof Date) {
+        str = arg.toISOString();
+      } else if (arg.isDateTime || moment.isMoment(arg)) {
+        str = arg.toISOString();
+      } else if (typeof arg === 'string') {
+        str = arg;
+      } else {
+        throw new Error(`Invalid argument for date_and_time function: ${arg}`);
+      }
+      try {
+        dt = str === '' ? moment() : parseIANATz(str) || moment.parseZone(str);
+      } catch (err) {
+        throw err;
+      }
+      if (!dt || !dt.isValid()) {
+        throw new Error('Invalid date_and_time. This is usually caused by an invalid format. Please check the input format');
+      }
     }
   } else if (args.length === 2) {
     const [date, time] = args;
@@ -87,7 +90,10 @@ const dateAndTime = (...args) => {
     throw new Error('Invalid number of arguments specified with "date_and_time" in-built function');
   }
 
-  return addProperties(dt, props);
+  if (dt !== undefined) {
+    result = addProperties(dt, props);
+  }
+  return result;
 };
 
 module.exports = { 'date and time': dateAndTime };
