@@ -190,7 +190,7 @@ function evaluateRule(rule, resolvedInputExpressions, outputNames, context) {
       }
     } catch (err) {
       logger.error(err);
-      throw new Error(`Failed to evaluate expression '${rule.inputExpressions[i]}': ${err}`);
+      throw new Error(`Failed to evaluate input condition in column ${i + 1}: '${rule.inputValues[i]}': ${err}`);
     }
   }
   const outputObject = {};
