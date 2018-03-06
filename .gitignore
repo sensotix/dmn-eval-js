@@ -1,14 +1,13 @@
 node_modules
-snippets
-_archive
 dummy.js
 npm-debug.log
-/.vs/feel/v15
-.vscode
-*.njsproj
-*.sln
 *.iml
 /.idea
+
+# webpack and babel
+/dist/dmn-eval-js.js
+webpack.config.js
+.babelrc
 
 # Coveralls
 coverage

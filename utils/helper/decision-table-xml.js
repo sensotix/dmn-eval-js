@@ -5,6 +5,7 @@
 const DmnModdle = require('dmn-moddle');
 const logger = require('loglevel').getLogger('dmn-eval-js');
 const feel = require('../../dist/feel');
+const moment = require('moment');
 
 function createModdle(additionalPackages, options) {
   return new DmnModdle(additionalPackages, options);
@@ -48,17 +49,21 @@ function parseRule(rule, idx) {
   return parsedRule;
 }
 
-function parseDecisionTable(decisionTable) {
+function parseDecisionTable(decisionId, decisionTable) {
   if ((decisionTable.hitPolicy !== 'FIRST') && (decisionTable.hitPolicy !== 'UNIQUE')
       && (decisionTable.hitPolicy !== 'COLLECT') && (decisionTable.hitPolicy !== 'RULE ORDER')) {
     throw new Error(`Unsupported hit policy ${decisionTable.hitPolicy}`);
   }
   const parsedDecisionTable = { hitPolicy: decisionTable.hitPolicy, rules: [], inputExpressions: [], parsedInputExpressions: [], outputNames: [] };
 
-  // parse rules
-  decisionTable.rule.forEach((rule, idx) => {
-    parsedDecisionTable.rules.push(parseRule(rule, idx));
-  });
+  // parse rules (there may be none, though)
+  if (decisionTable.rule === undefined) {
+    logger.warn(`The decision table for decision '${decisionId}' contains no rules.`);
+  } else {
+    decisionTable.rule.forEach((rule, idx) => {
+      parsedDecisionTable.rules.push(parseRule(rule, idx));
+    });
+  }
 
   // parse input expressions
   decisionTable.input.forEach((input) => {
@@ -96,7 +101,7 @@ function parseDecisions(drgElements) {
   // iterate over all decisions in the DMN
   drgElements.forEach((drgElement) => {
     // parse the decision table...
-    const decision = { decisionTable: parseDecisionTable(drgElement.decisionTable), requiredDecisions: [] };
+    const decision = { decisionTable: parseDecisionTable(drgElement.id, drgElement.decisionTable), requiredDecisions: [] };
     // ...and collect the decisions on which the current decision depends
     if (drgElement.informationRequirement !== undefined) {
       drgElement.informationRequirement.forEach((req) => {
@@ -130,7 +135,7 @@ function parseDmnXml(xml, opts) {
 
 function resolveExpression(expression, obj) {
   const parts = expression.split('.');
-  return parts.reduce((resolved, part) => resolved[part], obj);
+  return parts.reduce((resolved, part) => (resolved === undefined ? undefined : resolved[part]), obj);
 }
 
 // Sets the given value to a nested property of the given object. The nested property is resolved from the given expression.
@@ -163,16 +168,32 @@ function setOrAddValue(expression, obj, value) {
 }
 
 // merge the result of the required decision into the context so that it is available as input for the requested decision
-function mergeContext(context, additionalContent) {
-  for (const prop in additionalContent) { // eslint-disable-line no-restricted-syntax
-    if (additionalContent.hasOwnProperty(prop)) {
-      const value = additionalContent[prop];
-      if ((typeof value === 'object') && (value !== null) && (context[prop] !== undefined) && (context[prop] !== null)) {
-        mergeContext(context[prop], additionalContent[prop]);
-      } else if (Array.isArray(value) && Array.isArray(context[prop])) {
-        context[prop].push(value);
-      } else {
-        context[prop] = additionalContent[prop]; // eslint-disable-line no-param-reassign
+function mergeContext(context, additionalContent, aggregate = false) {
+  if (Array.isArray(additionalContent)) {
+    // additional content is the result of evaluation a rule table with multiple rule results
+    additionalContent.forEach(ruleResult => mergeContext(context, ruleResult, true));
+  } else {
+    // additional content is the result of evaluation a rule table with a single rule result
+    for (const prop in additionalContent) { // eslint-disable-line no-restricted-syntax
+      if (additionalContent.hasOwnProperty(prop)) {
+        const value = additionalContent[prop];
+        if (Array.isArray(context[prop])) {
+          if (Array.isArray(value)) {
+            context[prop] = context[prop].concat(value); // eslint-disable-line no-param-reassign
+          } else if (value !== null && value !== undefined) {
+            context[prop].push(value); // eslint-disable-line no-param-reassign
+          }
+        } else if ((typeof value === 'object') && (value !== null) && !moment.isMoment(value) && !moment.isDate(value) && !moment.isDuration(value)) {
+          if ((context[prop] === undefined) || (context[prop] === null)) {
+            context[prop] = {}; // eslint-disable-line no-param-reassign
+          }
+          mergeContext(context[prop], value, aggregate);
+        } else if (aggregate) {
+          context[prop] = []; // eslint-disable-line no-param-reassign
+          context[prop].push(value); // eslint-disable-line no-param-reassign
+        } else {
+          context[prop] = value; // eslint-disable-line no-param-reassign
+        }
       }
     }
   }
@@ -198,6 +219,8 @@ function evaluateRule(rule, resolvedInputExpressions, outputNames, context) {
     if (rule.output[i] !== null) {
       const outputValue = rule.output[i].build(context); // eslint-disable-line no-await-in-loop
       setOrAddValue(outputNames[i], outputObject, outputValue[0]);
+    } else {
+      setOrAddValue(outputNames[i], outputObject, undefined);
     }
   }
   return { matched: true, output: outputObject };
@@ -236,17 +259,15 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
       const resolvedInputExpression = parsedInputExpression.build(context); // eslint-disable-line no-await-in-loop
       resolvedInputExpressions.push(resolvedInputExpression[0]);
     } catch (err) {
-      throw new Error(`Failed to evaluate input expression ${plainInputExpression} of decision:  ${err}`);
+      throw new Error(`Failed to evaluate input expression ${plainInputExpression} of decision ${decisionId}: ${err}`);
     }
   }
 
-  // initialize the result to null for each output name (hit policy FIRST or UNIQUE) or to an empty array (hit policy COLLECT or RULE ORDER)
-  const decisionResult = {};
+  // initialize the result to an object with undefined output values (hit policy FIRST or UNIQUE) or to an empty array (hit policy COLLECT or RULE ORDER)
+  const decisionResult = (decisionTable.hitPolicy === 'FIRST') || (decisionTable.hitPolicy === 'UNIQUE') ? {} : [];
   decisionTable.outputNames.forEach((outputName) => {
     if ((decisionTable.hitPolicy === 'FIRST') || (decisionTable.hitPolicy === 'UNIQUE')) {
       setOrAddValue(outputName, decisionResult, undefined);
-    } else {
-      setOrAddValue(outputName, decisionResult, []);
     }
   });
 
@@ -269,18 +290,25 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
       }
       hasMatch = true;
       logger.info(`Result for decision "${decisionId}": ${JSON.stringify(ruleResult.output)} (rule ${i + 1} matched)`);
-      decisionTable.outputNames.forEach((outputName) => {
-        const resolvedOutput = resolveExpression(outputName, ruleResult.output);
-        if (resolvedOutput !== undefined || decisionTable.hitPolicy === 'FIRST' || decisionTable.hitPolicy === 'UNIQUE') {
-          setOrAddValue(outputName, decisionResult, resolvedOutput);
+
+      // merge the result of the matched rule
+      if ((decisionTable.hitPolicy === 'FIRST') || (decisionTable.hitPolicy === 'UNIQUE')) {
+        decisionTable.outputNames.forEach((outputName) => {
+          const resolvedOutput = resolveExpression(outputName, ruleResult.output);
+          if (resolvedOutput !== undefined || decisionTable.hitPolicy === 'FIRST' || decisionTable.hitPolicy === 'UNIQUE') {
+            setOrAddValue(outputName, decisionResult, resolvedOutput);
+          }
+        });
+        if (decisionTable.hitPolicy === 'FIRST') {
+          // no more rule results in this case
+          break;
         }
-      });
-      if (decisionTable.hitPolicy === 'FIRST') {
-        break;
+      } else {
+        decisionResult.push(ruleResult.output);
       }
     }
   }
-  if (!hasMatch) {
+  if (!hasMatch && decisionTable.rules.length > 0) {
     logger.warn(`No rule matched for decision "${decisionId}".`);
   }
   return decisionResult;

@@ -30,13 +30,13 @@
 </inputEntry>
         <outputEntry id="LiteralExpression_0k52ex3">        <text><![CDATA["Message 3"]]></text>
 </outputEntry>
-        <outputEntry id="LiteralExpression_1d74dxk">        <text><![CDATA["Value 3"]]></text>
+        <outputEntry id="LiteralExpression_1d74dxk">        <text></text>
 </outputEntry>
       </rule>
       <rule id="row-78874892-10">
         <inputEntry id="UnaryTests_0ap5wzj">        <text><![CDATA[not("C")]]></text>
 </inputEntry>
-        <outputEntry id="LiteralExpression_1j5lgsv">        <text><![CDATA["Message 4"]]></text>
+        <outputEntry id="LiteralExpression_1j5lgsv">        <text></text>
 </outputEntry>
         <outputEntry id="LiteralExpression_0rmu0it">        <text><![CDATA["Value 4"]]></text>
 </outputEntry>

@@ -2,13 +2,16 @@
 
 # About
 
-dmn-eval-js is a Javascript engine to execute decision tables according to the [DMN](http://www.omg.org/spec/DMN/1.1/) standard.
+dmn-eval-js is a Javascript rule engine to execute decision tables according to the [DMN](http://www.omg.org/spec/DMN/1.1/) standard.
 This implementation is based on [FEEL by EdgeVerve](https://github.com/EdgeVerve/feel). It is tailored to evaluation of
 simple expression language (S-FEEL), plus some cherry-picked parts of FEEL.
 
 dmn-eval-js allows to load and execute DMN decision tables from XML. DRGs are supported. Evaluation of decision tables is currently limited to those of hit policy FIRST (F), UNIQUE (U), RULE ORDER (R), and COLLECT (C) without aggregation.
 
 # Usage
+
+Use dmn-eval-js to *embed* a DMN engine in your Javascript application (browser or NodeJS).
+If you are looking for a DMN engine as a standalone server instead, you may find [dmn-server](https://github.com/HBTGmbH/dmn-nodejs-server) more suitable.
 
 ## Import
 
@@ -70,6 +73,35 @@ decisionTable.parseDmnXml(xmlContent)
          console.log(err)
     });
 ```
+
+Note than *parsing* a DMN decision table is a rather expensive operation. It should not be done
+for each *evaluation* of a decision table (the example above contains both parsing and evaluation just for the sake of completeness).
+
+## Evaluation result
+
+The result of the ```evaluateDecision(...)``` call is
+- ```undefined``` if no rule matched
+- an array of objects if the hit policy of the decision table is COLLECT or RULE ORDER (one array item for each matching rule)
+- an object if the hit policy of the decision table is FIRST or UNIQUE and a rule matched
+
+The object for a matching rule contains the evaluated output value(s) of the rule. 
+The structure is defined by the output names. Qualified names with a dot (.) inside lead to nested objects. See the following example:
+
+![DMN example](https://github.com/HBTGmbH/dmn-eval-js/blob/master/dmn-output.png "3 output columns with different structure")
+
+An object for a matching rule of the above table would look like this:
+
+```
+{
+  plainOutputProperty: '...',
+  output: {
+    property: '...',
+    nested: {
+       property: '...',
+    },
+  }
+}
+``` 
 
 ## Supported content in decision tables
 

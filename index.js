@@ -5,6 +5,9 @@
 *
 */
 
+// require('nashorn-polyfill');
+// require('core-js/modules/es6.object.assign');
+
 const decisionTable = require('./utils/helper/decision-table-xml.js');
 const dateTime = require('./utils/built-in-functions/date-time-functions');
 
