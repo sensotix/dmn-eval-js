@@ -252,4 +252,16 @@ describe(chalk.blue('Parse and evaluate decision tables'), function() {
       done();
     }).catch(err => done(err));
   });
+
+  it('Evaluation decision table with special characters in text node', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-decode-special-characters.dmn")).then(decisions => {
+      expect(decisions['test_decision']).not.to.be.undefined;
+      const context = {
+        reputationValue: 95,
+      };
+      const data = decisionTable.evaluateDecision('test_decision', decisions, context);
+      expect(data.reputationText).to.equal('good');
+      done();
+    }).catch(err => done(err));
+  });
 });

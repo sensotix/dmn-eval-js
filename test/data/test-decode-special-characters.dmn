@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" id="Definitions_1cxi73e" name="DRD" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="test_decision" name="Test Decision">
+    <decisionTable id="decisionTable_1" hitPolicy="FIRST">
+      <input id="input_1">
+        <inputExpression id="inputExpression_1" typeRef="integer">
+          <text>reputationValue</text>
+        </inputExpression>
+      </input>
+      <output id="output_1" name="reputationText" typeRef="string" />
+      <rule id="DecisionRule_015niyo">
+        <inputEntry id="UnaryTests_1ja4q0t">
+          <text>&lt; 50</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1tbfjkk">
+          <text>"bad"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0si0sr1">
+        <inputEntry id="UnaryTests_0hg1r7j">
+          <text>&gt; 90</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0yeibm4">
+          <text>"good"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_04wbavr">
+        <inputEntry id="UnaryTests_0usgzs6">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_15apnyy">
+          <text>"so-so"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
