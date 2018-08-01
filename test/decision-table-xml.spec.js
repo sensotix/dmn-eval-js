@@ -79,10 +79,10 @@ describe(chalk.blue('Parse and evaluate decision tables'), function() {
       };
       let data = decisionTable.evaluateDecision('decisionPrimary', decisions, context);
       expect(data.output.score).to.equal(50);
-      context.input.testDate = new Date("2018-04-04T00:00:00+00:00"),
+      context.input.testDate = new Date("2018-04-04T00:00:00+00:00");
       data = decisionTable.evaluateDecision('decisionPrimary', decisions, context);
       expect(data.output.score).to.equal(100);
-      context.input.testDate = new Date("2018-04-05T00:00:00+00:00"),
+      context.input.testDate = new Date("2018-04-05T00:00:00+00:00");
       data = decisionTable.evaluateDecision('decisionPrimary', decisions, context);
       expect(data.output.score).to.equal(0);
       done();
@@ -243,7 +243,6 @@ describe(chalk.blue('Parse and evaluate decision tables'), function() {
     decisionTable.parseDmnXml(readFile("./test/data/test-undefined-output-expression-collect.dmn")).then(decisions => {
       expect(decisions['decision']).not.to.be.undefined;
       data = decisionTable.evaluateDecision('decision', decisions, { input: { score: 3, category1: 'cat1', category3: 'cat3', otherCategory: 'other' } });
-      console.log(JSON.stringify(data));
       assert.deepEqual(data, [
         { output: { categories: 'cat1' } },
         { output: { categories: undefined } },

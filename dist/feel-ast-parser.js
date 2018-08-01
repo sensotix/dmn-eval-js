@@ -142,7 +142,7 @@ module.exports = function (ast) {
       return name;
     }
 
-    return resolveName(name, args, this.isResult);
+    return resolveName(name, args);
   };
 
   ast.LiteralNode.prototype.build = function () {
@@ -213,8 +213,6 @@ module.exports = function (ast) {
       }
       return processUserDefinedFunction(fnMeta);
     };
-
-    this.fnName.isResult = true;
 
     const fnNameResult = this.fnName.build(args);
     let result;

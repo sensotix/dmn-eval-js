@@ -9,6 +9,7 @@ const Big = require('big.js');
 const _ = require('lodash');
 const { valueT, valueInverseT, valueDT, valueInverseDT, valueDTD, valueInverseDTD, valueYMD, valueInverseYMD } = require('./value');
 const { date, time, 'date and time': dateandtime } = require('../built-in-functions');
+const moment = require('moment');
 
 /*
 dateTimeComponent contains the list of properties required for comparison.
@@ -250,9 +251,11 @@ const operatorMap = {
       } else if (x.isDtd && y.isDtd) {
         return valueInverseDTD(valueDTD(x) + valueDTD(y));
       } else if (x.isDateTime && y.isYmd) {
-        return dateandtime(date(x.year + y.years + Math.floor((x.month + y.months) / 12), (x.month + y.months) - (Math.floor((x.month + y.months) / 12) * 12), x.day), time(x));
+        const m = moment.tz({ year: x.year, month: x.month, day: x.day, hour: 0, minute: 0, second: 0 }, 'Etc/UTC').add(y.years, 'years').add(y.months, 'months').add(y.days(), 'days');
+        return dateandtime(date(m.year(), m.month(), m.date()), time(x));
       } else if (x.isDate && y.isYmd) {
-        return date(x.year + y.years + Math.floor((x.month + y.months) / 12), (x.month + y.months) - (Math.floor((x.month + y.months) / 12) * 12), x.day);
+        const m = moment.tz({ year: x.year, month: x.month, day: x.day, hour: 0, minute: 0, second: 0 }, 'Etc/UTC').add(y.years, 'years').add(y.months, 'months').add(y.days(), 'days');
+        return date(m.year(), m.month(), m.date());
       } else if (x.isYmd && (y.isDateTime || y.isDate)) {
         return dateandtime(date(y.year + x.years + Math.floor((y.month + x.months) / 12), (y.month + x.months) - (Math.floor((y.month + x.months) / 12) * 12), y.day), time(y));
       } else if ((x.isDateTime || x.isDate) && y.isDtd) {
@@ -290,9 +293,11 @@ const operatorMap = {
       } else if (x.isDtd && y.isDtd) {
         return valueInverseDTD(valueDTD(x) - valueDTD(y));
       } else if (x.isDateTime && y.isYmd) {
-        return dateandtime(date((x.year - y.years) + Math.floor((x.month - y.months) / 12), (x.month - y.months) - (Math.floor((x.month - y.months) / 12) * 12), x.day), time(x));
+        const m = moment.tz({ year: x.year, month: x.month, day: x.day, hour: 0, minute: 0, second: 0 }, 'Etc/UTC').subtract(y.years, 'years').subtract(y.months, 'months').subtract(y.days(), 'days');
+        return dateandtime(date(m.year(), m.month(), m.date()), time(x));
       } else if (x.isDate && y.isYmd) {
-        return date((x.year - y.years) + Math.floor((x.month - y.months) / 12), (x.month - y.months) - (Math.floor((x.month - y.months) / 12) * 12), x.day);
+        const m = moment.tz({ year: x.year, month: x.month, day: x.day, hour: 0, minute: 0, second: 0 }, 'Etc/UTC').subtract(y.years, 'years').subtract(y.months, 'months').subtract(y.days(), 'days');
+        return date(m.year(), m.month(), m.date());
       } else if (x.isYmd && (y.isDateTime || y.isDate)) {
         throw new Error(`${x.type} - ${y.type} : operation unsupported for one or more operands types`);
       } else if ((x.isDateTime || x.isDate) && y.isDtd) {
