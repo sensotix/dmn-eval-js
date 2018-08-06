@@ -9,7 +9,7 @@ const Big = require('big.js');
 const _ = require('lodash');
 const { valueT, valueInverseT, valueDT, valueInverseDT, valueDTD, valueInverseDTD, valueYMD, valueInverseYMD } = require('./value');
 const { date, time, 'date and time': dateandtime } = require('../built-in-functions');
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 /*
 dateTimeComponent contains the list of properties required for comparison.
