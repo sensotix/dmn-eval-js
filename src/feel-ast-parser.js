@@ -58,6 +58,31 @@ module.exports = function (ast) {
 
   ast.SimplePositiveUnaryTestNode.prototype.build = function (args) {
     const result = this.operand.build(args);
+
+    // hack to treat input expressions as input variables and let functions in input entries reference them
+    // for example: starts with(name, prefix)
+    // where "name" is the input expression
+    // for this to work, if the result of the function is true (like in the example above), that value cannot be
+    // compared with the the evaluated input expression (which is the value of the input variable), so we must
+    // patch the comparison here
+    if (args.context._inputVariableName && this.operand.type === 'FunctionInvocation' && this.operand.params) {
+      // patch only if there is an input variable and the simple positive unary test contains a function directly,
+      // where the input variable in a parameter of that function
+      const nodeIsQualifiedNameOfInputVariable = node =>
+        node.type === 'QualifiedName' && node.names.map(nameNode => nameNode.nameChars).join('.') === args.context._inputVariableName;
+      const inputVariableParameter = (this.operand.params.params || []).find(node => nodeIsQualifiedNameOfInputVariable(node));
+      if (inputVariableParameter) {
+        if (result === true) {
+          // if the function evaluates to true, compare the evaluated input expression with the evaluated input variable,
+          // not with the result of the function evaluation
+          return fnGen(this.operator || '==')(_, inputVariableParameter.build(args));
+        } else if (result === false) {
+          // if the function evaluates to false, the simple positive unary test should always evaluate to false
+          return () => false;
+        }
+      }
+    }
+
     return fnGen(this.operator || '==')(_, result);
   };
 

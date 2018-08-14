@@ -8,6 +8,7 @@
         "consistent-return": ["error", { "treatUndefinedAsUnspecified": true }],
         "no-nested-ternary":"off",
         "no-useless-escape":"off",
-        "no-prototype-builtins":"off"
+        "no-prototype-builtins":"off",
+        "no-underscore-dangle":"off"
     }
 }

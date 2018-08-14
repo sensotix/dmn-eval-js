@@ -263,4 +263,19 @@ describe(chalk.blue('Parse and evaluate decision tables'), function() {
       done();
     }).catch(err => done(err));
   });
+
+  it('Evaluation decision table with input variable for functions', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-input-variable.dmn")).then(decisions => {
+      expect(decisions['decision']).not.to.be.undefined;
+      let data = decisionTable.evaluateDecision('decision', decisions, { issue: { id: "CAM-1234" }});
+      expect(data.projectName).to.equal('Camunda');
+      data = decisionTable.evaluateDecision('decision', decisions, { issue: { id: "CAMUNDA" }});
+      expect(data.projectName).to.equal('Camunda');
+      data = decisionTable.evaluateDecision('decision', decisions, { issue: { id: "HIBERNATE" }});
+      expect(data.projectName).to.equal('Hibernate');
+      data = decisionTable.evaluateDecision('decision', decisions, { issue: { id: "DROOLS" }});
+      expect(data.projectName).to.equal('Drools');
+      done();
+    }).catch(err => done(err));
+  });
 });

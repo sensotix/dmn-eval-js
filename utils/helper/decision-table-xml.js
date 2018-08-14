@@ -202,9 +202,9 @@ function mergeContext(context, additionalContent, aggregate = false) {
 function evaluateRule(rule, resolvedInputExpressions, outputNames, context) {
   for (let i = 0; i < rule.input.length; i += 1) {
     try {
-      const inputFunction = rule.input[i].build(context); // eslint-disable-line no-await-in-loop
-      const input = resolvedInputExpressions[i];
-      if (!inputFunction(input)) {
+      const inputVariableName = resolvedInputExpressions[i].inputVariableName;
+      const inputFunction = rule.input[i].build(Object.assign({ _inputVariableName: inputVariableName }, context)); // eslint-disable-line no-await-in-loop
+      if (!inputFunction(resolvedInputExpressions[i].value)) {
         return {
           matched: false,
         };
@@ -257,7 +257,12 @@ function evaluateDecision(decisionId, decisions, context, alreadyEvaluatedDecisi
     const plainInputExpression = decisionTable.inputExpressions[i];
     try {
       const resolvedInputExpression = parsedInputExpression.build(context); // eslint-disable-line no-await-in-loop
-      resolvedInputExpressions.push(resolvedInputExpression[0]);
+      // check if the input expression is to be treated as an input variable - this is the case if it is a qualified name
+      let inputVariableName;
+      if (parsedInputExpression.simpleExpressions && parsedInputExpression.simpleExpressions[0].type === 'QualifiedName') {
+        inputVariableName = parsedInputExpression.simpleExpressions[0].names.map(nameNode => nameNode.nameChars).join('.');
+      }
+      resolvedInputExpressions.push({ value: resolvedInputExpression[0], inputVariableName });
     } catch (err) {
       throw new Error(`Failed to evaluate input expression ${plainInputExpression} of decision ${decisionId}: ${err}`);
     }

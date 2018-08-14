@@ -141,6 +141,13 @@ const context = {
 
 Function implementation should be free of side-effects. Date and time instances that are arguments to functions are moment-js instances.
 
+#### Built-in functions
+
+dmn-eval-js supports the following built-in functions from DMN 1.1:
+- string functions: starts with, ends with, contains, upper case, lower case
+- boolean functions: not
+
+
 ### Input entries
 
 As input entries, simple unary tests according to the DMN specification are supported, with some additions:
@@ -187,6 +194,28 @@ Most combinations of the syntax elements above are valid, too. For example the f
 ```
 not(f(a + 1), [ date(b) + duration(c.d) .. g(d) ]) 
 ```
+
+#### Input variables as parameters to functions in input entries
+
+Sometimes, one whishes to use the value of an input expression as a parameter to a function in an input entry, for example
+to test that a given input string contains a certain substring, where each substring to test for constitutes a different rule.
+This could be used for example to derive the project name from the prefix of an issue ID, like so:
+
+![DMN example](https://github.com/HBTGmbH/dmn-eval-js/blob/master/dmn-input-variables.png "Derive the project name from the prefix of an issue ID.")
+
+The ```starts with(string, substring)``` function allows to test if a string starts with a given prefix,
+but with S-FEEL it is not possible to use the value of an input expression as input variable to the function.
+Basically, if the input expression is ```issueId```, and the input entry is ```starts with(issueId, "CAM")```, then the input entry
+will be evaluated to ```true``` if the value of ```issueId``` is for example ```CAM-42```, but a rule with this input entry
+will still not match since ```true``` does not equal the value of the input expression, which is ```CAM-42```.
+
+dmn-eval-js follows a pragmatic approach to allow for input variable in input entries.
+The convention is: if an input expression is a qualified name (in DMN sense), and
+an input entry contains a function which takes the same qualified name as one of its parameters,
+and the function evaluates to ```true```, then the rule will match with respect to this
+input entry (it may still not match because of non-matching other input entries). 
+The decision table shown above can therefore be used to derive the project name from the issue prefix.
+  
 
 ### Output entries
 

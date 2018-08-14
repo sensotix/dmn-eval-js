@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" id="definitions_0lo74qn" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="decision" name="Decision">
+    <decisionTable id="decisionTable" hitPolicy="FIRST">
+      <input id="input1" label="Issue ID">
+        <inputExpression id="inputExpression1" typeRef="string">
+          <text>issue.id</text>
+        </inputExpression>
+      </input>
+      <output id="output1" label="Project Name" name="projectName" typeRef="string" />
+      <rule id="row-176321811-1">
+        <description>This will not work out of the box in most S-FEEL engines.</description>
+        <inputEntry id="UnaryTests_0q800ta">
+          <text>starts with(issue.id, "CAM"), "CAMUNDA"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1gw2cpb">
+          <text>"Camunda"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_17llb8j">
+        <inputEntry id="UnaryTests_0w3f0fg">
+          <text>"HIBERNATE"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1hypcn9">
+          <text>"Hibernate"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_16ohq42">
+        <inputEntry id="UnaryTests_0415u5m">
+          <text>upper case("drools")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1v0m52c">
+          <text>"Drools"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
