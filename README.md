@@ -144,9 +144,9 @@ Function implementation should be free of side-effects. Date and time instances 
 #### Built-in functions
 
 dmn-eval-js supports the following built-in functions from DMN 1.1:
-- string functions: starts with, ends with, contains, upper case, lower case
-- boolean functions: not
-
+- string functions: ```starts with, ends with, contains, upper case, lower case```
+- boolean functions: ```not```
+- list functions: ```list contains, count, min, max, sum, mean, and, or, append, concatenate, insert before, remove, reverse, index of, union, distinct values, flatten```
 
 ### Input entries
 
@@ -201,7 +201,7 @@ Sometimes, one whishes to use the value of an input expression as a parameter to
 to test that a given input string contains a certain substring, where each substring to test for constitutes a different rule.
 This could be used for example to derive the project name from the prefix of an issue ID, like so:
 
-![DMN example](https://github.com/HBTGmbH/dmn-eval-js/blob/master/dmn-input-variables.png "Derive the project name from the prefix of an issue ID.")
+![Functions in input entries](https://github.com/HBTGmbH/dmn-eval-js/blob/master/dmn-input-variables.png "Derive the project name from the prefix of an issue ID.")
 
 The ```starts with(string, substring)``` function allows to test if a string starts with a given prefix,
 but with S-FEEL it is not possible to use the value of an input expression as input variable to the function.

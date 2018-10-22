@@ -278,4 +278,22 @@ describe(chalk.blue('Parse and evaluate decision tables'), function() {
       done();
     }).catch(err => done(err));
   });
+
+  it('Evaluation decision table with no input', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-empty-input.dmn")).then(decisions => {
+      expect(decisions['noInput']).not.to.be.undefined;
+      let data = decisionTable.evaluateDecision('noInput', decisions, { });
+      expect(data.output).to.equal("d'oh");
+      done();
+    }).catch(err => done(err));
+  });
+
+  it('Evaluation decision table with no input and no rules', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-empty-decision.dmn")).then(decisions => {
+      expect(decisions['noDecision']).not.to.be.undefined;
+      let data = decisionTable.evaluateDecision('noDecision', decisions, { });
+      expect(data.output).to.be.undefined;
+      done();
+    }).catch(err => done(err));
+  });
 });

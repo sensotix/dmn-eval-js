@@ -17,20 +17,22 @@ function readDmnXml(xml, opts, callback) {
 
 function parseRule(rule, idx) {
   const parsedRule = { number: idx + 1, input: [], inputValues: [], output: [], outputValues: [] };
-  rule.inputEntry.forEach((inputEntry) => {
-    let text = inputEntry.text;
-    if (text === '') {
-      text = '-';
-    }
-    try {
-      parsedRule.input.push(feel.parse(text, {
-        startRule: 'SimpleUnaryTests',
-      }));
-      parsedRule.inputValues.push(text);
-    } catch (err) {
-      throw new Error(`Failed to parse input entry: ${text} ${err}`);
-    }
-  });
+  if (rule.inputEntry) {
+    rule.inputEntry.forEach((inputEntry) => {
+      let text = inputEntry.text;
+      if (text === '') {
+        text = '-';
+      }
+      try {
+        parsedRule.input.push(feel.parse(text, {
+          startRule: 'SimpleUnaryTests',
+        }));
+        parsedRule.inputValues.push(text);
+      } catch (err) {
+        throw new Error(`Failed to parse input entry: ${text} ${err}`);
+      }
+    });
+  }
   rule.outputEntry.forEach((outputEntry) => {
     if (!outputEntry.text) {
       parsedRule.output.push(null);
@@ -66,24 +68,26 @@ function parseDecisionTable(decisionId, decisionTable) {
   }
 
   // parse input expressions
-  decisionTable.input.forEach((input) => {
-    let inputExpression;
-    if (input.inputExpression && input.inputExpression.text) {
-      inputExpression = input.inputExpression.text;
-    } else if (input.inputVariable) {
-      inputExpression = input.inputVariable;
-    } else {
-      throw new Error(`No input variable or expression set for input '${input.id}'`);
-    }
-    parsedDecisionTable.inputExpressions.push(inputExpression);
-    try {
-      parsedDecisionTable.parsedInputExpressions.push(feel.parse(inputExpression, {
-        startRule: 'SimpleExpressions',
-      }));
-    } catch (err) {
-      throw new Error(`Failed to parse input expression '${inputExpression}': ${err}`);
-    }
-  });
+  if (decisionTable.input) {
+    decisionTable.input.forEach((input) => {
+      let inputExpression;
+      if (input.inputExpression && input.inputExpression.text) {
+        inputExpression = input.inputExpression.text;
+      } else if (input.inputVariable) {
+        inputExpression = input.inputVariable;
+      } else {
+        throw new Error(`No input variable or expression set for input '${input.id}'`);
+      }
+      parsedDecisionTable.inputExpressions.push(inputExpression);
+      try {
+        parsedDecisionTable.parsedInputExpressions.push(feel.parse(inputExpression, {
+          startRule: 'SimpleExpressions',
+        }));
+      } catch (err) {
+        throw new Error(`Failed to parse input expression '${inputExpression}': ${err}`);
+      }
+    });
+  }
 
   // parse output names
   decisionTable.output.forEach((output) => {
