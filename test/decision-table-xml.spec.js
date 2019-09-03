@@ -27,6 +27,13 @@ describe(chalk.blue('Parse and evaluate decision tables'), function() {
     }).catch(err => done(err));
   });
 
+  it('Parse decision table', function(done) {
+    decisionTable.parseDmnXml(readFile("./test/data/test-type-error.dmn")).then(decisions => {
+      expect(decisions).not.to.be.undefined;
+      done();
+    }).catch(err => done(err));
+  });
+
   it('Evaluation decision table', function(done) {
     decisionTable.parseDmnXml(readFile("./test/data/test.dmn")).then(decisions => {
       expect(decisions['decisionDependent']).not.to.be.undefined;

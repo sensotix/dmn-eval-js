@@ -1,6 +1,6 @@
 {
   "name": "@hbtgmbh/dmn-eval-js",
-  "version": "1.4.5",
+  "version": "1.5.0",
   "description": "Evaluation of DMN 1.1 decision tables, limited to S-FEEL (Simple Friendly Enough Expression Language)",
   "license": "MIT",
   "main": "index.js",
