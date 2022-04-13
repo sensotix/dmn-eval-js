@@ -1,0 +1,2361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="Definitions_0cit63p" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
+  <decision id="Decision_1xpwc5d" name="Lohnsummenpraemie">
+    <informationRequirement id="InformationRequirement_12uv5aw">
+      <requiredInput href="#InputData_1wwn913" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0zk1emd">
+      <requiredInput href="#InputData_1f8jx2d" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1f5wxe1">
+      <input id="Input_1" label="Lohnsumme" biodi:width="192">
+        <inputExpression id="InputExpression_1" typeRef="long">
+          <text>Lohnsumme</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0e1xdva" label="Gefahrenklasse">
+        <inputExpression id="LiteralExpression_0rc0ztc" typeRef="integer">
+          <text>Gefahrenklasse</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Lohnsummenpraemie" name="Lohnsummenpraemie" typeRef="double" />
+      <rule id="DecisionRule_0gqbmp1">
+        <inputEntry id="UnaryTests_03rjeoz">
+          <text>&lt;= 20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0en9pzw">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0zipzot">
+          <text>55.33</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0jyxghc">
+        <inputEntry id="UnaryTests_0qiqm9c">
+          <text>[20001..30000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_12q7dyt">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0t8sgp3">
+          <text>72.98</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_13zupd4">
+        <description></description>
+        <inputEntry id="UnaryTests_0y6kv9l">
+          <text>[30001..40000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0hpb3xn">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_11hp89e">
+          <text>86.86</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1vwdhhd">
+        <inputEntry id="UnaryTests_05hq6nn">
+          <text>[40001..50000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xrfegc">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1em4vrr">
+          <text>100.43</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1q9pmqu">
+        <inputEntry id="UnaryTests_0f4dxxk">
+          <text>[50001..75000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0kngcdy">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_01vzdxl">
+          <text>128.24</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_11b9hg7">
+        <inputEntry id="UnaryTests_0gr3fwh">
+          <text>[75001..100000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_112u5c2">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1hbdne1">
+          <text>151.35</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0nxj169">
+        <inputEntry id="UnaryTests_0803jlq">
+          <text>[100001..150000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1k3wdvy">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_184x7qz">
+          <text>186.91</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0vksat8">
+        <inputEntry id="UnaryTests_0fae4hp">
+          <text>[150001..200000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1g28ujp">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1sqfyza">
+          <text>222.06</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0udp7hz">
+        <inputEntry id="UnaryTests_1jh9hfq">
+          <text>[200001..250000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0o402v1">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ngbxad">
+          <text>252.90</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0hrj61f">
+        <inputEntry id="UnaryTests_0jz5sun">
+          <text>[250001..300000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0znx9y7">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1xal0cz">
+          <text>282.98</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0q9i85z">
+        <inputEntry id="UnaryTests_0lyoav8">
+          <text>[300001..350000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0zxfp26">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_13pq2cr">
+          <text>319.42</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_08t409p">
+        <inputEntry id="UnaryTests_0dvot2f">
+          <text>[350001..400000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ceh2a7">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0w9drbk">
+          <text>348.97</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0zeafp1">
+        <inputEntry id="UnaryTests_0oa4x7c">
+          <text>[400001..450000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0fihtw6">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1lckfwk">
+          <text>378.25</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1a1jkqz">
+        <inputEntry id="UnaryTests_0pasq2u">
+          <text>[450001..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0pvtou3">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0qyykdb">
+          <text>415.59</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1mmzi6t">
+        <inputEntry id="UnaryTests_1fnsnxs">
+          <text>&gt;= 500001</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1c4kgc6">
+          <text>0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ssi9va" expressionLanguage="javascript">
+          <text>415.59+26.09*(1+Math.floor((Lohnsumme-500000)/50000))</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0mpzpr4">
+        <inputEntry id="UnaryTests_1vljzf5">
+          <text>&lt;= 20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1l5t7fr">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0099rsj">
+          <text>121</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_050tj65">
+        <inputEntry id="UnaryTests_11tr40t">
+          <text>[20001..30000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06or4eq">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_13rq6f1">
+          <text>152.83</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0bzblds">
+        <inputEntry id="UnaryTests_1110jlc">
+          <text>[30001..40000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0hp3i7x">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0xdrox5">
+          <text>181.87</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0tani3o">
+        <inputEntry id="UnaryTests_0zo82iq">
+          <text>[40001..50000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1gvfhnw">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0yhq6eb">
+          <text>210.02</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1f7j0t0">
+        <inputEntry id="UnaryTests_0bw0j2p">
+          <text>[50001..75000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1uvpien">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_06usnko">
+          <text>269.01</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1wfm3ty">
+        <inputEntry id="UnaryTests_1aiydfp">
+          <text>[75001..100000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_08zj4q2">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0dby4t1">
+          <text>316.65</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1gf0t1t">
+        <inputEntry id="UnaryTests_1tm30r3">
+          <text>[100001..150000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03j1ifd">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_02dxyex">
+          <text>391.97</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0z7yj5y">
+        <inputEntry id="UnaryTests_0up5mkw">
+          <text>[150001..200000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1go9xjf">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_18ohdp5">
+          <text>465.48</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0l0pb1d">
+        <inputEntry id="UnaryTests_1cpbou5">
+          <text>[200001..250000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1jny7tx">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0lcgfu4">
+          <text>530.88</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_05r18gq">
+        <inputEntry id="UnaryTests_0kjziz4">
+          <text>[250001..300000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1vhqty0">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0axonvv">
+          <text>594.72</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1gr1zvw">
+        <inputEntry id="UnaryTests_0itxw3w">
+          <text>[300001..350000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_023sn0c">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_14t4u1c">
+          <text>672.51</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1nhdx4k">
+        <inputEntry id="UnaryTests_027amsw">
+          <text>[350001..400000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1kumr1p">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0hv20ng">
+          <text>735.28</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0w9eh5u">
+        <inputEntry id="UnaryTests_14o1c92">
+          <text>[400001..450000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1fmczrq">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0hx8crk">
+          <text>797.48</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0qtk029">
+        <inputEntry id="UnaryTests_1pd5xod">
+          <text>[450001..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0rwif3n">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1mt855m">
+          <text>877.16</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_00pr45o">
+        <inputEntry id="UnaryTests_0db7ezm">
+          <text>&gt;= 500001</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_039qxi3">
+          <text>1</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_07dda2c" expressionLanguage="javascript">
+          <text>877.16+55.53*(1+Math.floor((Lohnsumme-500000)/50000))</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1cn6vzf">
+        <inputEntry id="UnaryTests_15c29oe">
+          <text>&lt;= 20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0cwj4le">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1utoawb">
+          <text>220.64</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0y9w45x">
+        <inputEntry id="UnaryTests_17smwzz">
+          <text>[20001..30000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_12n5m30">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_07w7sc9">
+          <text>278.9</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_186ol6u">
+        <inputEntry id="UnaryTests_1r6854k">
+          <text>[30001..40000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_021zh97">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1yucs0r">
+          <text>331.51</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_13jp4ci">
+        <inputEntry id="UnaryTests_1srpfpn">
+          <text>[40001..50000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1iksf8h">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1yr3qh9">
+          <text>382.59</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1wwa3gx">
+        <inputEntry id="UnaryTests_10c8h1u">
+          <text>[50001..75000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0kpsh19">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0qul8sz">
+          <text>489.26</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0mrzny2">
+        <inputEntry id="UnaryTests_0wp2vwt">
+          <text>[75001..100000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0a43c3o">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1j5dp3a">
+          <text>577.43</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0tc18ot">
+        <inputEntry id="UnaryTests_0jrvtwr">
+          <text>[100001..150000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1t4dqp4">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_06uxaz8">
+          <text>713.88</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0bq0zqc">
+        <inputEntry id="UnaryTests_1p91dir">
+          <text>[150001..200000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1w53sdn">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1v72ptp">
+          <text>847.42</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1a7nxcn">
+        <inputEntry id="UnaryTests_1n9kho9">
+          <text>[200001..250000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0o6l1wb">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0onicgn">
+          <text>966.07</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_11ork85">
+        <inputEntry id="UnaryTests_1xvpwnt">
+          <text>[250001..300000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0azfgh1">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_133e01y">
+          <text>1081.87</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1b32fas">
+        <inputEntry id="UnaryTests_0lke79a">
+          <text>[300001..350000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0w3zgt2">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0iabzj3">
+          <text>122.78</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ij1n1d">
+        <inputEntry id="UnaryTests_0uaggbf">
+          <text>[350001..400000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0kyd7j4">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_09xnmq8">
+          <text>1336.6</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1ib0zb8">
+        <inputEntry id="UnaryTests_1yjxgyo">
+          <text>[400001..450000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ax60pa">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0fgu4ur">
+          <text>1449.4</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ffc0ch">
+        <inputEntry id="UnaryTests_1mtz2bb">
+          <text>[450001..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_05cdxeb">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0uy9j2v">
+          <text>1593.69</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_01itv2b">
+        <inputEntry id="UnaryTests_0ghnlir">
+          <text>&gt;= 500001</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1wfyi1b">
+          <text>2</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_19nzakb" expressionLanguage="javascript">
+          <text>1593.69+100.63*(1+Math.floor((Lohnsumme-500000)/50000))</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0zkgu62">
+        <inputEntry id="UnaryTests_0b8ewk8">
+          <text>&lt;= 20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06srruz">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0u4aitb">
+          <text>308.22</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_10lmpds">
+        <inputEntry id="UnaryTests_0m2uxq7">
+          <text>[20001..30000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_12koln3">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0nknm8g">
+          <text>388.68</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0j1638y">
+        <inputEntry id="UnaryTests_1dgh2tq">
+          <text>[30001..40000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1adwcyw">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0b6lh7e">
+          <text>462.12</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0oxyvjy">
+        <inputEntry id="UnaryTests_04j4em6">
+          <text>[40001..50000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0j5mypd">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0jalxtg">
+          <text>533.37</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_042elzb">
+        <inputEntry id="UnaryTests_1hk4zle">
+          <text>[50001..75000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0or9wbu">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_10jb854">
+          <text>682.23</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0xbxa7f">
+        <inputEntry id="UnaryTests_0tke1c2">
+          <text>[75001..100000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0hkgs8y">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_17bfige">
+          <text>804.51</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1l26yk0">
+        <inputEntry id="UnaryTests_03d4jmd">
+          <text>[100001..150000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1t1w8yi">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0bkinx3">
+          <text>995.53</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0qrg4ku">
+        <inputEntry id="UnaryTests_07zth6m">
+          <text>[150001..200000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0vguyt9">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0r1hsqw">
+          <text>1181.65</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_07g7tn4">
+        <inputEntry id="UnaryTests_0a1acz7">
+          <text>[200001..250000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0af2ggg">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0zhuovm">
+          <text>1347.13</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0v3kp03">
+        <inputEntry id="UnaryTests_148uzfi">
+          <text>[250001..300000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_05bqr4e">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0xznzoo">
+          <text>1508.17</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0z2avgt">
+        <inputEntry id="UnaryTests_1xtqcj7">
+          <text>[300001..350000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1dyt37c">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1kma54z">
+          <text>1705.22</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_18qhuj4">
+        <inputEntry id="UnaryTests_014wp38">
+          <text>[350001..400000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_18np62u">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ezv4ft">
+          <text>1863.96</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0nxe6p6">
+        <inputEntry id="UnaryTests_036fl1c">
+          <text>[400001..450000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_16ggwoq">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0yq1dk0">
+          <text>2021.27</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_098l3tl">
+        <inputEntry id="UnaryTests_0sddmr5">
+          <text>[450001..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_15dmek1">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ptwhq7">
+          <text>2222.53</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1bt8b3h">
+        <inputEntry id="UnaryTests_0fd71hs">
+          <text>&gt;= 500001</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_103p2f0">
+          <text>3</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0iaijbi" expressionLanguage="javascript">
+          <text>1593.69+100.63*(1+Math.floor((Lohnsumme-500000)/50000))</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0n0n2rq">
+        <inputEntry id="UnaryTests_0tprsjx">
+          <text>&lt;= 20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1qbek6g">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ysahb9">
+          <text>586.56</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1i2qc3w">
+        <inputEntry id="UnaryTests_0fs9l60">
+          <text>[20001..30000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03pt7us">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_17bbqyq">
+          <text>741.34</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1ujmfmt">
+        <inputEntry id="UnaryTests_1hvdr4o">
+          <text>[30001..40000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1l3km8e">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0qn5ttt">
+          <text>880.48</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_01jrict">
+        <inputEntry id="UnaryTests_0sm8ab2">
+          <text>[40001..50000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1lgtdot">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_05ghjoj">
+          <text>1016.51</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0imfz3e">
+        <inputEntry id="UnaryTests_0hp847r">
+          <text>[50001..75000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0m7nfk3">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_06ici1v">
+          <text>1299.94</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0uz2gwi">
+        <inputEntry id="UnaryTests_1pmkd4y">
+          <text>[75001..100000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1nps8wm">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0dz6x4j">
+          <text>1532.77</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_00606v4">
+        <inputEntry id="UnaryTests_055ko3m">
+          <text>[100001..150000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0430yow">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_161irmu">
+          <text>1897.07</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ygseey">
+        <inputEntry id="UnaryTests_1t9ti79">
+          <text>[150001..200000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1j2jhou">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1f58vm4">
+          <text>2251.49</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0jol0hx">
+        <inputEntry id="UnaryTests_17x14e3">
+          <text>[200001..250000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1osriiy">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ozkg68">
+          <text>2567.79</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1u5417b">
+        <inputEntry id="UnaryTests_0zt0b41">
+          <text>[250001..300000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_025dsey">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_01tkqkp">
+          <text>2876.49</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_01ay5yl">
+        <inputEntry id="UnaryTests_061piur">
+          <text>[300001..350000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_08e2wbw">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1lrd1a8">
+          <text>3252.8</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ei61k9">
+        <inputEntry id="UnaryTests_0o23yl8">
+          <text>[350001..400000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1mbjfmj">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_01kzw30">
+          <text>3556.34</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1e7ysd0">
+        <inputEntry id="UnaryTests_1obmjq0">
+          <text>[400001..450000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1wc4jjz">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_18c5wdv">
+          <text>3857.17</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_06cwbbg">
+        <inputEntry id="UnaryTests_12fcp1c">
+          <text>[450001..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01x8sgn">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ua94iv">
+          <text>4242.48</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_18p87v9">
+        <inputEntry id="UnaryTests_0aojje1">
+          <text>&gt;= 500001</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1rw0bku">
+          <text>4</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ej2ux2" expressionLanguage="javascript">
+          <text>4242.48+298.38*(1+Math.floor((Lohnsumme-500000)/50000))</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0jgfr9c">
+        <inputEntry id="UnaryTests_1vw80kp">
+          <text>&lt;= 20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_02o99re">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_07npvhd">
+          <text>1035.92</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0qv98sa">
+        <inputEntry id="UnaryTests_0r0iuv5">
+          <text>[20001..30000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0r8s0cp">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1qhfrt7">
+          <text>1308.61</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1y6a2rq">
+        <inputEntry id="UnaryTests_0hrvd1l">
+          <text>[30001..40000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0z7pphl">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1qd3tbx">
+          <text>1554.76</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_12orouv">
+        <inputEntry id="UnaryTests_0xx84mi">
+          <text>[40001..50000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1534vx6">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_13w9la7">
+          <text>1794.35</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0sg6qf9">
+        <inputEntry id="UnaryTests_0xjb688">
+          <text>[50001..75000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0jy4gh1">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1wyx55p">
+          <text>2295.74</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_09ee9ps">
+        <inputEntry id="UnaryTests_16e98do">
+          <text>[75001..100000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_11pcdae">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0m5euo5">
+          <text>2706.69</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0brq324">
+        <inputEntry id="UnaryTests_0toeplx">
+          <text>[100001..150000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0bufh4q">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0vd3tpk">
+          <text>3348.85</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0e2svz7">
+        <inputEntry id="UnaryTests_046asod">
+          <text>[150001..200000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0h435sr">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_10n9new">
+          <text>3975.05</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1p8umm0">
+        <inputEntry id="UnaryTests_0btju8x">
+          <text>[200001..250000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ed4b8y">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0t14k4p">
+          <text>4532.35</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1f72uit">
+        <inputEntry id="UnaryTests_0mfnums">
+          <text>[250001..300000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0q1hjv8">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0lbz94r">
+          <text>5076.29</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0vzfepw">
+        <inputEntry id="UnaryTests_1imhylh">
+          <text>[300001..350000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_07nkghr">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0yvmzfl">
+          <text>5738.62</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ng3mii">
+        <inputEntry id="UnaryTests_0ijmftn">
+          <text>[350001..400000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0fjphpk">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_09z02aa">
+          <text>6273.30</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1hdcxqn">
+        <inputEntry id="UnaryTests_00s2fst">
+          <text>[400001..450000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_032nbqx">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0xlrah2">
+          <text>6803.16</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0wu8pdx">
+        <inputEntry id="UnaryTests_1qe8h8r">
+          <text>[450001..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0mqyqf9">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1u1txbl">
+          <text>7481.35</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_19e5w28">
+        <inputEntry id="UnaryTests_1xyao7w">
+          <text>&gt;= 500001</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_04reb8i">
+          <text>5</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ngbck7" expressionLanguage="javascript">
+          <text>7481.35+508.44*(1+Math.floor((Lohnsumme-500000)/50000))</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_1wwn913" name="Lohnsumme" />
+  <inputData id="InputData_1f8jx2d" name="Gefahrenklasse" />
+  <inputData id="InputData_0nyzi6e" name="Umsatz" />
+  <decision id="Decision_0qtghxx" name="Umsatztangentenmultiplikator">
+    <informationRequirement id="InformationRequirement_052qxg8">
+      <requiredInput href="#InputData_0nyzi6e" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1gp6v4y">
+      <requiredInput href="#InputData_1wwn913" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1y614l8">
+      <input id="InputClause_1sadtcw" label="Umsatz">
+        <inputExpression id="LiteralExpression_1vkpccf" typeRef="integer">
+          <text>Umsatz</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0qcw7mf" label="Lohnsumme">
+        <inputExpression id="LiteralExpression_14lbgp9" typeRef="long">
+          <text>Lohnsumme</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0bep79e" label="USTM" name="USTM" typeRef="double" />
+      <rule id="DecisionRule_0bsvkma">
+        <inputEntry id="UnaryTests_0b1hpj8">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_00s7ho4">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1geg4qg">
+          <text>Umsatz/Lohnsumme</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_01kftty" name="Umsatztangente">
+    <informationRequirement id="InformationRequirement_10ndasw">
+      <requiredDecision href="#Decision_0qtghxx" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1bh98am">
+      <requiredInput href="#InputData_1f8jx2d" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0oijora">
+      <input id="InputClause_1256dis" label="USTM" camunda:inputVariable="USTM">
+        <inputExpression id="LiteralExpression_0vs6m5j" typeRef="double">
+          <text>USTM</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_14xivgr" label="Gefahrenklasse">
+        <inputExpression id="LiteralExpression_1sy6czg" typeRef="integer">
+          <text>Gefahrenklasse</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0v1rgqb" label="Umsatz" camunda:inputVariable="Umsatz">
+        <inputExpression id="LiteralExpression_1tc3end" typeRef="integer">
+          <text>Umsatz</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0xav6ek" label="UST" name="UST" typeRef="double" />
+      <rule id="DecisionRule_1ppr872">
+        <inputEntry id="UnaryTests_0teg4h1">
+          <text>&lt;=10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_16z680n">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0i7q47l">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1p0sv6y">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0589fiw">
+        <inputEntry id="UnaryTests_0fmf19d">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0j50g8n">
+          <text>0</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0i69oxj">
+          <text>&gt;200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1y5im02">
+          <text>0.15</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1jr6621">
+        <inputEntry id="UnaryTests_0sj04mv">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1psaa3q">
+          <text>1</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_00uhpgo">
+          <text>&gt;200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1y5to9f">
+          <text>0.31</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_175awi4">
+        <inputEntry id="UnaryTests_0uo868n">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03ztqi0">
+          <text>2</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_15g1x1g">
+          <text>&gt;200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1lzzg5c">
+          <text>0.46</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_19sqkhs">
+        <inputEntry id="UnaryTests_1gpuga5">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1io79a6">
+          <text>3</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01xtp4s">
+          <text>&gt;200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04nf3ke">
+          <text>0.67</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1usoh5s">
+        <inputEntry id="UnaryTests_04x30o8">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_19jwszq">
+          <text>4</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0hj0scp">
+          <text>&gt;200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0w70uxl">
+          <text>0.92</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0wsdfyk">
+        <inputEntry id="UnaryTests_0atbccv">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xdkd94">
+          <text>5</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_016vawi">
+          <text>&gt;200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0gt4siy">
+          <text>1.84</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_09ztafx">
+        <inputEntry id="UnaryTests_0ay43fh">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_008j34g">
+          <text>0</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1w8w4te">
+          <text>&lt;=200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1gp17xm">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_11pqtw8">
+        <inputEntry id="UnaryTests_088k1r1">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0l9hze6">
+          <text>1</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0fo9pl0">
+          <text>&lt;=200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1k916wa">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0jky1zf">
+        <inputEntry id="UnaryTests_0mrf127">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06hptr9">
+          <text>2</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1qq035h">
+          <text>&lt;=200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1rfsuii">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1t7m7c9">
+        <inputEntry id="UnaryTests_1q9kjp8">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0kagt96">
+          <text>3</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1a1klvo">
+          <text>&lt;=200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0g2sx3e">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1p2shap">
+        <inputEntry id="UnaryTests_0xnaxkt">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1s1zvgi">
+          <text>4</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1t2wo0q">
+          <text>&lt;=200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1syo9nc">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1rpvyo2">
+        <inputEntry id="UnaryTests_1q204r3">
+          <text>&gt;10</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ygmoyc">
+          <text>5</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1inntyy">
+          <text>&lt;=200000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_19tbjhk">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_1lrr0m9" name="Grundpraemie">
+    <informationRequirement id="InformationRequirement_0apizg9">
+      <requiredDecision href="#Decision_01kftty" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1rot6w3">
+      <requiredDecision href="#Decision_1xpwc5d" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0twgjoq" hitPolicy="FIRST">
+      <input id="InputClause_0df1lmm" label="Basispraemie" camunda:inputVariable="Basispraemie">
+        <inputExpression id="LiteralExpression_0jqvzpk" typeRef="double">
+          <text>Basispraemie</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1wlto12" label="UST" camunda:inputVariable="UST">
+        <inputExpression id="LiteralExpression_03lpvn3" typeRef="double">
+          <text>UST</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_16xp7v3" label="Grundpraemie" name="Grundpraemie" typeRef="double" />
+      <rule id="DecisionRule_18ppw5k">
+        <inputEntry id="UnaryTests_0j8infd">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1s4zyvg">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0uafluy">
+          <text>7</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_0m1nkxr" name="Pauschalversicherungssumme" />
+  <inputData id="InputData_1q73i45" name="Deckungspacket" />
+  <decision id="Decision_1fyfahg" name="Zwischenpraemie">
+    <informationRequirement id="InformationRequirement_0iuiy4s">
+      <requiredInput href="#InputData_0m1nkxr" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1nvndyz">
+      <requiredInput href="#InputData_1q73i45" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0adve33">
+      <requiredDecision href="#Decision_1lrr0m9" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0tmtzme">
+      <input id="InputClause_0hdlvb3" label="Pauschalversicherungssumme" camunda:inputVariable="Pauschalversicherungssumme">
+        <inputExpression id="LiteralExpression_039ggzb" typeRef="string">
+          <text>Pauschalversicherungssumme</text>
+        </inputExpression>
+        <inputValues id="UnaryTests_0du6lsn">
+          <text>"1000000","2000000","3000000","4000000","5000000","7000000"</text>
+        </inputValues>
+      </input>
+      <output id="OutputClause_1830dx4" label="Zwischenpraemie" name="Zwischenpraemie" typeRef="double" />
+      <rule id="DecisionRule_1w51osz">
+        <inputEntry id="UnaryTests_1sr0q59">
+          <text>"1000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1np8g03">
+          <text>Grundpraemie</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0igj0z9">
+        <inputEntry id="UnaryTests_166ee3n">
+          <text>"2000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0vab0n0">
+          <text>decimal(product(Grundpraemie,1.1),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1qfjhea">
+        <inputEntry id="UnaryTests_0b1gleq">
+          <text>"3000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0tzct89">
+          <text>decimal(product(Grundpraemie,1.22),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1mjmnlk">
+        <inputEntry id="UnaryTests_0j73umv">
+          <text>"4000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1fdhtv0">
+          <text>decimal(product(Grundpraemie,1.35),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_17dyzu0">
+        <inputEntry id="UnaryTests_1bfts4w">
+          <text>"5000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1lb39lg">
+          <text>decimal(product(Grundpraemie,1.5),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_14adnxz">
+        <inputEntry id="UnaryTests_0l1ywu2">
+          <text>"7000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_11dq059">
+          <text>decimal(product(Grundpraemie,1.7),2)</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_13cjct7" name="VD Gastro">
+    <informationRequirement id="InformationRequirement_11g6g1p">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_07uptre">
+      <input id="InputClause_1gw7ztu" label="Vorteilsdeckung_Gastro">
+        <inputExpression id="LiteralExpression_0ed2f6o" typeRef="boolean">
+          <text>Vorteilsdeckung_Gastro</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_07ubs8o" label="Praemie_Gastro" name="Praemie_Gastro" typeRef="double" />
+      <rule id="DecisionRule_0d2jj3c">
+        <inputEntry id="UnaryTests_0fx65yg">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0kg9nxj">
+          <text>decimal(max(product(Zwischenpraemie, 0.1),100),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1wuj060">
+        <inputEntry id="UnaryTests_0bmqhgk">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0rikjwa">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0pror9r" name="Haftpflichtversicherungsprämie">
+    <informationRequirement id="InformationRequirement_12saahd">
+      <requiredDecision href="#Decision_13cjct7" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0xw1kxw">
+      <requiredInput href="#InputData_08n1jzu" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1c4y6k2">
+      <requiredDecision href="#Decision_1n4mxzv" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_06ig3cs">
+      <requiredDecision href="#Decision_0abkt4u" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0oldej0">
+      <requiredDecision href="#Decision_0qlpl5k" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0sju77k">
+      <requiredDecision href="#Decision_1yh1yu8" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0uajqlg">
+      <requiredDecision href="#Decision_0z0e693" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1m79tzq">
+      <requiredDecision href="#Decision_0321bsi" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_095yzup">
+      <requiredDecision href="#Decision_0rpd0co" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0qjj49j">
+      <requiredDecision href="#Decision_0tirkvn" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0g6cupz">
+      <requiredDecision href="#Decision_0fc94mw" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1fqqqpa">
+      <requiredDecision href="#Decision_1euaep8" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_19qskic">
+      <requiredDecision href="#Decision_1886lpr" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1v2bf6z">
+      <requiredDecision href="#Decision_1gcp31w" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1gbgkgw">
+      <requiredDecision href="#Decision_14yfnoo" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1d1w39f">
+      <input id="InputClause_0vd3jh2" label="Rabatt" camunda:inputVariable="Rabatt">
+        <inputExpression id="LiteralExpression_03uo4pt" typeRef="integer">
+          <text>Rabatt</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0ys2urz" label="Haftpflichtversicherungspraemie" name="Haftpflichtversicherungspraemie" typeRef="double" />
+      <rule id="DecisionRule_0e89056">
+        <inputEntry id="UnaryTests_1xifamb">
+          <text>[-100 .. 30]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1iwzcsu">
+          <text>decimal(product(sum(Zwischenpraemie,Deckungspacketpraemie, Praemie_Gastro,Praemie_Gastro_Pauschalreisen,Praemie_Handel,Praemie_KFZ_Betriebe,Praemie_KFZ_Betriebe_Taetigkeiten_an_KFZ,Praemie_Baugewerbe,Praemie_Produktion,Praemie_Handwerk,Praemie_Gesundheitsberufe,Praemie_Baumeister,Praemie_Apotheken,Praemie_Schluesselverlust,Praemie_Reine_Vermoegensschaeden_Wegen_Datenverlust),((100-Rabatt)/100)),2)</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_08n1jzu" name="Rabatt" />
+  <decision id="Decision_1n4mxzv" name="VD Gastro Pauschalreisen">
+    <informationRequirement id="InformationRequirement_0zcglmw">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0hvgqfi">
+      <input id="InputClause_1wvywfb" label="Vorteilsdeckung_Gastro_Pauschalreisen" camunda:inputVariable="Vorteilsdeckung_Gastro_Pauschalreisen">
+        <inputExpression id="LiteralExpression_1shgqyh" typeRef="boolean">
+          <text>Vorteilsdeckung_Gastro_Pauschalreisen</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_1cmmhk6" label="Praemie_Gastro_Pauschalreisen" name="Praemie_Gastro_Pauschalreisen" typeRef="double" />
+      <rule id="DecisionRule_15h6ool">
+        <inputEntry id="UnaryTests_0wux957">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0mdkfx9">
+          <text>decimal(max(product(Zwischenpraemie, 0.35),300),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0zojj8i">
+        <inputEntry id="UnaryTests_0j3sksm">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_09525yj">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0abkt4u" name="VD Handel">
+    <informationRequirement id="InformationRequirement_1vj1gxk">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1ia4rnw">
+      <input id="InputClause_1yiujch" label="Vorteilsdeckung_Handel" camunda:inputVariable="Vorteilsdeckung_Handel">
+        <inputExpression id="LiteralExpression_0o6o8ik" typeRef="boolean">
+          <text>Vorteilsdeckung_Handel</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_1u6nxr4" label="Praemie_Handel" name="Praemie_Handel" typeRef="double" />
+      <rule id="DecisionRule_1hpn2fi">
+        <inputEntry id="UnaryTests_10vl6qi">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_02k8hya">
+          <text>decimal(max(product(Zwischenpraemie, 0.3),200),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_102ekld">
+        <inputEntry id="UnaryTests_107hbg3">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0qm1bsf">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0qlpl5k" name="VD KFZ-Betriebe">
+    <informationRequirement id="InformationRequirement_13kna0o">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0rzswxn">
+      <input id="InputClause_1pruwtq" label="Vorteilsdeckung_KFZ_Betriebe" camunda:inputVariable="Vorteilsdeckung_KFZ_Betriebe">
+        <inputExpression id="LiteralExpression_147qjjs" typeRef="boolean">
+          <text>Vorteilsdeckung_KFZ_Betriebe</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0oxmjhc" label="Praemie_KFZ_Betriebe" name="Praemie_KFZ_Betriebe" typeRef="double" />
+      <rule id="DecisionRule_06ng34q">
+        <inputEntry id="UnaryTests_1xy91vq">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04uj5b0">
+          <text>decimal(max(product(Zwischenpraemie, 0.2),150),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0lx5gx6">
+        <inputEntry id="UnaryTests_06hoxh6">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1xepima">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_1yh1yu8" name="VD KFZ-Betriebe Taetigkeiten an KFZ">
+    <informationRequirement id="InformationRequirement_1r4gqan">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_12ax1kc">
+      <input id="InputClause_1i1mbgi" label="Vorteilsdeckung_KFZ_Betriebe_Taetigkeiten_an_KFZ" camunda:inputVariable="Vorteilsdeckung_KFZ_Betriebe_Taetigkeiten_an_KFZ">
+        <inputExpression id="LiteralExpression_0f7cbp0" typeRef="boolean">
+          <text>Vorteilsdeckung_KFZ_Betriebe_Taetigkeiten_an_KFZ</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0lyc93x" label="Praemie_KFZ_Betriebe_Taetigkeiten_an_KFZ" name="Praemie_KFZ_Betriebe_Taetigkeiten_an_KFZ" typeRef="double" />
+      <rule id="DecisionRule_0agy5fv">
+        <inputEntry id="UnaryTests_05va86p">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1z04k6r">
+          <text>decimal(max(product(Zwischenpraemie, 0.4),500),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0mppuh6">
+        <inputEntry id="UnaryTests_13jo9pz">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1gvrg52">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0z0e693" name="VD Baugewerbe">
+    <informationRequirement id="InformationRequirement_136vgl4">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_19zoj7q">
+      <input id="InputClause_1uv1c5o" label="Vorteilsdeckung_Baugewerbe" camunda:inputVariable="Vorteilsdeckung_Baugewerbe">
+        <inputExpression id="LiteralExpression_1y65ye0" typeRef="boolean">
+          <text>Vorteilsdeckung_Baugewerbe</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_079n8c9" label="Praemie_Baugewerbe" name="Praemie_Baugewerbe" typeRef="double" />
+      <rule id="DecisionRule_0ve79ju">
+        <inputEntry id="UnaryTests_0uk5l5j">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1fv4e5r">
+          <text>decimal(max(product(Zwischenpraemie, 0.4),300),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1uvdxep">
+        <inputEntry id="UnaryTests_06s0jyq">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1prmnt6">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0321bsi" name="VD Produktion">
+    <informationRequirement id="InformationRequirement_1x7e29x">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0dprkr4">
+      <input id="InputClause_1bqpw1c" label="Vorteilsdeckung_Produktion" camunda:inputVariable="Vorteilsdeckung_Produktion">
+        <inputExpression id="LiteralExpression_1kktur9" typeRef="boolean">
+          <text>Vorteilsdeckung_Produktion</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_13n5wdl" label="Praemie_Produktion" name="Praemie_Produktion" typeRef="double" />
+      <rule id="DecisionRule_1be4o6z">
+        <inputEntry id="UnaryTests_1ld8g1z">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0wt8fln">
+          <text>decimal(max(product(Zwischenpraemie, 0.4),300),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_06l5yls">
+        <inputEntry id="UnaryTests_062n7rk">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_08o5mz5">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0rpd0co" name="VD Handwerk">
+    <informationRequirement id="InformationRequirement_0uv4txm">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0gvvjfh">
+      <input id="InputClause_16hxxw5" label="Vorteilsdeckung_Handwerk" camunda:inputVariable="Vorteilsdeckung_Handwerk">
+        <inputExpression id="LiteralExpression_1d48e48" typeRef="boolean">
+          <text>Vorteilsdeckung_Handwerk</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0jyivgt" label="Praemie_Handwerk" name="Praemie_Handwerk" typeRef="double" />
+      <rule id="DecisionRule_1u3050d">
+        <inputEntry id="UnaryTests_1rluw7v">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04oafqn">
+          <text>decimal(max(product(Zwischenpraemie, 0.4),300),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_01kta73">
+        <inputEntry id="UnaryTests_136fpva">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1l55utd">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0tirkvn" name="VD Gesundheitsberufe">
+    <informationRequirement id="InformationRequirement_04gwddb">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1hs7yj7">
+      <input id="InputClause_1aah5ma" label="Vorteilsdeckung_Gesundheitsberufe" camunda:inputVariable="Vorteilsdeckung_Gesundheitsberufe">
+        <inputExpression id="LiteralExpression_1og125f" typeRef="boolean">
+          <text>Vorteilsdeckung_Gesundheitsberufe</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_1oku2kz" label="Praemie_Gesundheitsberufe" name="Praemie_Gesundheitsberufe" typeRef="double" />
+      <rule id="DecisionRule_1jayb1c">
+        <inputEntry id="UnaryTests_006biky">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0t1flf9">
+          <text>decimal(max(product(Zwischenpraemie, 0.1),30),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_07bghfk">
+        <inputEntry id="UnaryTests_107uklw">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_17zcluv">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0fc94mw" name="VD Baumeister">
+    <informationRequirement id="InformationRequirement_0minbel">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1bu2urz">
+      <input id="InputClause_1lq9zyb" label="Vorteilsdeckung_Baumeister" camunda:inputVariable="Vorteilsdeckung_Baumeister">
+        <inputExpression id="LiteralExpression_1jrzb5n" typeRef="boolean">
+          <text>Vorteilsdeckung_Baumeister</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_022wsex" label="Praemie_Baumeister" name="Praemie_Baumeister" typeRef="double" />
+      <rule id="DecisionRule_0gdfn8m">
+        <inputEntry id="UnaryTests_0brxsbk">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0brlhuq">
+          <text>decimal(max(product(Zwischenpraemie, 0.05),100),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1jk0rfd">
+        <inputEntry id="UnaryTests_1ix7bs8">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0cylaj7">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_1euaep8" name="VD Apotheken">
+    <informationRequirement id="InformationRequirement_1hc60n6">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_02vxq4y">
+      <input id="InputClause_0ov9jo1" label="Vorteilsdeckung_Apotheken" camunda:inputVariable="Vorteilsdeckung_Apotheken">
+        <inputExpression id="LiteralExpression_1so4t9h" typeRef="boolean">
+          <text>Vorteilsdeckung_Apotheken</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0r3rb8l" label="Praemie_Apotheken" name="Praemie_Apotheken" typeRef="double" />
+      <rule id="DecisionRule_10xs27q">
+        <inputEntry id="UnaryTests_10tc4e7">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0e8ctq5">
+          <text>max(product(Zwischenpraemie, 0.3),200)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_139lgqn">
+        <inputEntry id="UnaryTests_0g0njrl">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1af8qcd">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_1886lpr" name="Deckunspacket">
+    <informationRequirement id="InformationRequirement_0glcttt">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0yow6a6">
+      <input id="InputClause_14yp9q7" label="Deckungspacket" camunda:inputVariable="Deckungspacket">
+        <inputExpression id="LiteralExpression_0mtlke0" typeRef="string">
+          <text>Deckungspacket</text>
+        </inputExpression>
+        <inputValues id="UnaryTests_09yyaet">
+          <text>"Komfort","Komfort HBB Plus","Exklusiv HBB Plus"</text>
+        </inputValues>
+      </input>
+      <input id="InputClause_1qvzq9o" label="Pauschalversicherungssumme" camunda:inputVariable="Pauschalversicherungssumme">
+        <inputExpression id="LiteralExpression_0x6g4jj" typeRef="string">
+          <text>Pauschalversicherungssumme</text>
+        </inputExpression>
+        <inputValues id="UnaryTests_0gozhw3">
+          <text>"1000000","2000000","3000000","4000000","5000000","7000000"</text>
+        </inputValues>
+      </input>
+      <output id="OutputClause_1l8nt47" label="Deckungspacketpraemie" name="Deckungspacketpraemie" typeRef="double" />
+      <rule id="DecisionRule_04is71k">
+        <inputEntry id="UnaryTests_03afeg0">
+          <text>"Komfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ilgep6">
+          <text>"1000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ujiy2j">
+          <text>decimal(max(245,product(Zwischenpraemie,0.6)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0wm7x6x">
+        <inputEntry id="UnaryTests_0hatuac">
+          <text>"Komfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_13xfdob">
+          <text>"2000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_12xenmh">
+          <text>decimal(max(270,product(Zwischenpraemie,0.6)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1y4s8gi">
+        <inputEntry id="UnaryTests_18n0ul5">
+          <text>"Komfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1grxnke">
+          <text>"3000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1s16e4s">
+          <text>decimal(max(300,product(Zwischenpraemie,0.6)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0wqecjr">
+        <inputEntry id="UnaryTests_1ncx953">
+          <text>"Komfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ih0mfi">
+          <text>"4000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0lgl55h">
+          <text>decimal(max(330,product(Zwischenpraemie,0.6)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0wwjqon">
+        <inputEntry id="UnaryTests_1u3fr3t">
+          <text>"Komfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1v9f7kx">
+          <text>"5000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0w0dje5">
+          <text>decimal(max(370,product(Zwischenpraemie,0.6)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0xrun65">
+        <inputEntry id="UnaryTests_0bfgvxu">
+          <text>"Komfort"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0njavok">
+          <text>"7000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1f63gc9">
+          <text>decimal(max(430,product(Zwischenpraemie,0.6)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0omecbk">
+        <inputEntry id="UnaryTests_0gnkcyy">
+          <text>"Komfort HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1oqae8q">
+          <text>"1000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_091fgou">
+          <text>decimal(max(280,product(Zwischenpraemie,0.75)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ixtnkk">
+        <inputEntry id="UnaryTests_16ja6of">
+          <text>"Komfort HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1jk7epy">
+          <text>"2000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1xl7we5">
+          <text>decimal(max(310,product(Zwischenpraemie,0.75)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1hructg">
+        <inputEntry id="UnaryTests_1abnexo">
+          <text>"Komfort HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1i0rvab">
+          <text>"3000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0e0wdmv">
+          <text>decimal(max(340,product(Zwischenpraemie,0.75)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1uiax26">
+        <inputEntry id="UnaryTests_1wxfy80">
+          <text>"Komfort HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_09b0bmj">
+          <text>"4000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0j2nbom">
+          <text>decimal(max(380,product(Zwischenpraemie,0.75)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1xn8zgz">
+        <inputEntry id="UnaryTests_05grask">
+          <text>"Komfort HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1js0clh">
+          <text>"5000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_029st78">
+          <text>decimal(max(420,product(Zwischenpraemie,0.75)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_17lkm11">
+        <inputEntry id="UnaryTests_1t5hvkl">
+          <text>"Komfort HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0u53mgu">
+          <text>"7000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1oo0o8w">
+          <text>decimal(max(490,product(Zwischenpraemie,0.75)),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0t9pl9r">
+        <inputEntry id="UnaryTests_1i9b3n5">
+          <text>"Exklusiv HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0oqsnaz">
+          <text>"2000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0wqgz5v">
+          <text>decimal(max(375,Zwischenpraemie),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1dphtr5">
+        <inputEntry id="UnaryTests_0bgr5fx">
+          <text>"Exklusiv HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0e76m95">
+          <text>"3000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1vu7hc2">
+          <text>decimal(max(415,Zwischenpraemie),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1uv8tr6">
+        <inputEntry id="UnaryTests_1mz8fe0">
+          <text>"Exklusiv HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_18fephn">
+          <text>"4000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0q9mh0p">
+          <text>decimal(max(460,Zwischenpraemie),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_10j56n4">
+        <inputEntry id="UnaryTests_1n0wh6s">
+          <text>"Exklusiv HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0wknvql">
+          <text>"5000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0bjsv92">
+          <text>decimal(max(510,Zwischenpraemie),2)</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_11q1pq8">
+        <inputEntry id="UnaryTests_1sw7bn7">
+          <text>"Exklusiv HBB Plus"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0e66ibs">
+          <text>"7000000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_079a6ea">
+          <text>decimal(max(585,Zwischenpraemie),2)</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_1gcp31w" name="Schluesselverlust">
+    <informationRequirement id="InformationRequirement_0kl5rsj">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1x84upe">
+      <input id="InputClause_0muz5rd" label="Schluesselverlust" camunda:inputVariable="Schluesselverlust">
+        <inputExpression id="LiteralExpression_0nqpx3u" typeRef="string">
+          <text>Schluesselverlust</text>
+        </inputExpression>
+        <inputValues id="UnaryTests_0svi6mc">
+          <text>"0","10000","50000"</text>
+        </inputValues>
+      </input>
+      <output id="OutputClause_0rznbod" label="Praemie_Schluesselverlust" name="Praemie_Schluesselverlust" typeRef="double" />
+      <rule id="DecisionRule_0fj7zop">
+        <inputEntry id="UnaryTests_0oz5fso">
+          <text>"0"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1605j3p">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1wc4awf">
+        <inputEntry id="UnaryTests_0csv4i0">
+          <text>"10000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_10do7mc">
+          <text>300</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0emenzr">
+        <inputEntry id="UnaryTests_1eqavbu">
+          <text>"50000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0glf31q">
+          <text>450</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_14yfnoo" name="Reine Vermoegensschaeden wegen Datenverlust">
+    <informationRequirement id="InformationRequirement_1nvz8xp">
+      <requiredDecision href="#Decision_1fyfahg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0ismpit">
+      <input id="InputClause_06qeln0" label="Reine_Vermoegensschaeden_Wegen_Datenverlust" camunda:inputVariable="Reine_Vermoegensschaeden_Wegen_Datenverlust">
+        <inputExpression id="LiteralExpression_1jbhvom" typeRef="string">
+          <text>Reine_Vermoegensschaeden_Wegen_Datenverlust</text>
+        </inputExpression>
+        <inputValues id="UnaryTests_0a4y0ut">
+          <text>"0","30000","100000"</text>
+        </inputValues>
+      </input>
+      <output id="OutputClause_04fmgnx" label="Praemie_Reine_Vermoegensschaeden_Wegen_Datenverlust" name="Praemie_Reine_Vermoegensschaeden_Wegen_Datenverlust" typeRef="double" />
+      <rule id="DecisionRule_1xbe022">
+        <inputEntry id="UnaryTests_04i96iu">
+          <text>"0"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0y1md73">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_07dx7gu">
+        <inputEntry id="UnaryTests_16pgb18">
+          <text>"30000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1jqq6n0">
+          <text>300</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0z1kd8t">
+        <inputEntry id="UnaryTests_1urace2">
+          <text>"100000"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1u3gtvn">
+          <text>540</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_09a2b47" name="Ergebnisse">
+    <informationRequirement id="InformationRequirement_1sswvme">
+      <requiredDecision href="#Decision_0pror9r" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_05d0p38">
+      <input id="InputClause_0ihmbbv" label="Deckungspacket" camunda:inputVariable="Deckungspacket">
+        <inputExpression id="LiteralExpression_10zcneb" typeRef="string">
+          <text>Deckungspacket</text>
+        </inputExpression>
+        <inputValues id="UnaryTests_09wsxu2">
+          <text>"Komfort","Komfort Plus","Exklusiv Plus"</text>
+        </inputValues>
+      </input>
+      <output id="OutputClause_0awyvjm" label="Grundpraemie" name="Grundpraemie" typeRef="double" />
+      <output id="OutputClause_07bvo9w" label="Lohnsummenpraemie" name="Lohnsummenpraemie" typeRef="double" />
+      <output id="OutputClause_1mdtt73" label="UST" name="UST" typeRef="double" />
+      <rule id="DecisionRule_1d4202b">
+        <inputEntry id="UnaryTests_05dkjlh">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_08o59xm">
+          <text>Grundpraemie</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0tqvbr0">
+          <text>Lohnsummenpraemie</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0ybgmno">
+          <text>UST</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_1xpwc5d">
+        <dc:Bounds height="80" width="180" x="2120" y="860" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_1yb6bgq" dmnElementRef="InputData_1wwn913">
+        <dc:Bounds height="45" width="125" x="2023" y="1177" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1s0muwf" dmnElementRef="InformationRequirement_12uv5aw">
+        <di:waypoint x="2086" y="1177" />
+        <di:waypoint x="2240" y="960" />
+        <di:waypoint x="2240" y="940" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_02y4ins" dmnElementRef="InputData_1f8jx2d">
+        <dc:Bounds height="45" width="125" x="2007" y="1017" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0tof4xv" dmnElementRef="InformationRequirement_0zk1emd">
+        <di:waypoint x="2070" y="1017" />
+        <di:waypoint x="2180" y="960" />
+        <di:waypoint x="2180" y="940" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_17cg7yg" dmnElementRef="InputData_0nyzi6e">
+        <dc:Bounds height="45" width="125" x="1767" y="1188" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_04lbja9" dmnElementRef="InformationRequirement_052qxg8">
+        <di:waypoint x="1830" y="1188" />
+        <di:waypoint x="1830" y="1090" />
+        <di:waypoint x="1830" y="1070" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_02jyl4x" dmnElementRef="InformationRequirement_1gp6v4y">
+        <di:waypoint x="2086" y="1177" />
+        <di:waypoint x="1890" y="1090" />
+        <di:waypoint x="1890" y="1070" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0hais3v" dmnElementRef="Decision_0qtghxx">
+        <dc:Bounds height="80" width="180" x="1770" y="990" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_06l94nm" dmnElementRef="InformationRequirement_10ndasw">
+        <di:waypoint x="1860" y="990" />
+        <di:waypoint x="1850" y="940" />
+        <di:waypoint x="1850" y="920" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0je274c" dmnElementRef="Decision_01kftty">
+        <dc:Bounds height="80" width="180" x="1790" y="840" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0bhf45q" dmnElementRef="Decision_1lrr0m9">
+        <dc:Bounds height="80" width="180" x="1920" y="660" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0uhpjel" dmnElementRef="InformationRequirement_0apizg9">
+        <di:waypoint x="1880" y="840" />
+        <di:waypoint x="1980" y="760" />
+        <di:waypoint x="1980" y="740" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_00rf12f" dmnElementRef="InformationRequirement_1rot6w3">
+        <di:waypoint x="2210" y="860" />
+        <di:waypoint x="2040" y="760" />
+        <di:waypoint x="2040" y="740" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0f7d3qa" dmnElementRef="InformationRequirement_1bh98am">
+        <di:waypoint x="2070" y="1017" />
+        <di:waypoint x="1910" y="940" />
+        <di:waypoint x="1910" y="920" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_1pkrudg" dmnElementRef="InputData_0m1nkxr">
+        <dc:Bounds height="45" width="125" x="1727" y="677" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_1wg9xro" dmnElementRef="InputData_1q73i45">
+        <dc:Bounds height="45" width="125" x="2207" y="677" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1b673ww" dmnElementRef="InformationRequirement_0iuiy4s">
+        <di:waypoint x="1790" y="677" />
+        <di:waypoint x="1965" y="550" />
+        <di:waypoint x="1965" y="530" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0ryprnh" dmnElementRef="InformationRequirement_1nvndyz">
+        <di:waypoint x="2270" y="677" />
+        <di:waypoint x="2055" y="550" />
+        <di:waypoint x="2055" y="530" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_1r8nkk9" dmnElementRef="Decision_1fyfahg">
+        <dc:Bounds height="80" width="180" x="1920" y="450" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0bhwf9q" dmnElementRef="InformationRequirement_0adve33">
+        <di:waypoint x="2010" y="660" />
+        <di:waypoint x="2010" y="550" />
+        <di:waypoint x="2010" y="530" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0wcmg2f" dmnElementRef="Decision_13cjct7">
+        <dc:Bounds height="80" width="180" x="2650" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_1etcmg6" dmnElementRef="Decision_0pror9r">
+        <dc:Bounds height="80" width="180" x="1930" y="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0sb8rie" dmnElementRef="InformationRequirement_11g6g1p">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="2740" y="350" />
+        <di:waypoint x="2740" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0l3fuxu" dmnElementRef="InformationRequirement_12saahd">
+        <di:waypoint x="2740" y="250" />
+        <di:waypoint x="2050" y="180" />
+        <di:waypoint x="2050" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_12pvqyx" dmnElementRef="InputData_08n1jzu">
+        <dc:Bounds height="45" width="125" x="1667" y="97" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1dhxdd7" dmnElementRef="InformationRequirement_0xw1kxw">
+        <di:waypoint x="1792" y="120" />
+        <di:waypoint x="1910" y="120" />
+        <di:waypoint x="1930" y="120" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0954mtf" dmnElementRef="Decision_1n4mxzv">
+        <dc:Bounds height="80" width="180" x="2950" y="240" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1ot0n2a" dmnElementRef="InformationRequirement_0zcglmw">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="3040" y="340" />
+        <di:waypoint x="3040" y="320" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0kf4n3d" dmnElementRef="InformationRequirement_1c4y6k2">
+        <di:waypoint x="3040" y="240" />
+        <di:waypoint x="2062" y="180" />
+        <di:waypoint x="2062" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_11fqbpr" dmnElementRef="Decision_0abkt4u">
+        <dc:Bounds height="80" width="180" x="2340" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_032vcrk" dmnElementRef="InformationRequirement_1vj1gxk">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="2430" y="350" />
+        <di:waypoint x="2430" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0atztc0" dmnElementRef="InformationRequirement_06ig3cs">
+        <di:waypoint x="2430" y="250" />
+        <di:waypoint x="2038" y="180" />
+        <di:waypoint x="2038" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_07zck4f" dmnElementRef="Decision_0qlpl5k">
+        <dc:Bounds height="80" width="180" x="2080" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1wnkpdq" dmnElementRef="InformationRequirement_13kna0o">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="2170" y="350" />
+        <di:waypoint x="2170" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_1im3rg5" dmnElementRef="InformationRequirement_0oldej0">
+        <di:waypoint x="2170" y="250" />
+        <di:waypoint x="2026" y="180" />
+        <di:waypoint x="2026" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0nijoqd" dmnElementRef="Decision_1yh1yu8">
+        <dc:Bounds height="80" width="180" x="1840" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_02p6szm" dmnElementRef="InformationRequirement_1r4gqan">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="1930" y="350" />
+        <di:waypoint x="1930" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_1svz4ox" dmnElementRef="InformationRequirement_0sju77k">
+        <di:waypoint x="1930" y="250" />
+        <di:waypoint x="2014" y="180" />
+        <di:waypoint x="2014" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0s667jg" dmnElementRef="Decision_0z0e693">
+        <dc:Bounds height="80" width="180" x="1560" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_00z0qed" dmnElementRef="InformationRequirement_136vgl4">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="1650" y="350" />
+        <di:waypoint x="1650" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0s7bysg" dmnElementRef="InformationRequirement_0uajqlg">
+        <di:waypoint x="1650" y="250" />
+        <di:waypoint x="2002" y="180" />
+        <di:waypoint x="2002" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_1txca13" dmnElementRef="Decision_0321bsi">
+        <dc:Bounds height="80" width="180" x="1260" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0zx2mto" dmnElementRef="InformationRequirement_1x7e29x">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="1350" y="350" />
+        <di:waypoint x="1350" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0tm08ac" dmnElementRef="InformationRequirement_1m79tzq">
+        <di:waypoint x="1350" y="250" />
+        <di:waypoint x="1990" y="180" />
+        <di:waypoint x="1990" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_11xl1gh" dmnElementRef="Decision_0rpd0co">
+        <dc:Bounds height="80" width="180" x="970" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0j0ibm0" dmnElementRef="InformationRequirement_0uv4txm">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="1060" y="350" />
+        <di:waypoint x="1060" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_09z2nhd" dmnElementRef="InformationRequirement_095yzup">
+        <di:waypoint x="1060" y="250" />
+        <di:waypoint x="1978" y="180" />
+        <di:waypoint x="1978" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0y5slv0" dmnElementRef="Decision_0tirkvn">
+        <dc:Bounds height="80" width="180" x="700" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0bhyc0e" dmnElementRef="InformationRequirement_04gwddb">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="790" y="350" />
+        <di:waypoint x="790" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0o1upgg" dmnElementRef="InformationRequirement_0qjj49j">
+        <di:waypoint x="790" y="250" />
+        <di:waypoint x="1966" y="180" />
+        <di:waypoint x="1966" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_02860pl" dmnElementRef="Decision_0fc94mw">
+        <dc:Bounds height="80" width="180" x="440" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_1m9l5et" dmnElementRef="Decision_1euaep8">
+        <dc:Bounds height="80" width="180" x="160" y="250" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0npu0ir" dmnElementRef="InformationRequirement_0minbel">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="530" y="350" />
+        <di:waypoint x="530" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_1ya7uqh" dmnElementRef="InformationRequirement_1hc60n6">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="250" y="350" />
+        <di:waypoint x="250" y="330" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0g6j24j" dmnElementRef="InformationRequirement_0g6cupz">
+        <di:waypoint x="530" y="250" />
+        <di:waypoint x="1954" y="180" />
+        <di:waypoint x="1954" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0x3yju9" dmnElementRef="InformationRequirement_1fqqqpa">
+        <di:waypoint x="250" y="250" />
+        <di:waypoint x="1942" y="180" />
+        <di:waypoint x="1942" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0h4r5mu" dmnElementRef="Decision_1886lpr">
+        <dc:Bounds height="80" width="180" x="3170" y="350" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_17o4a1q" dmnElementRef="InformationRequirement_0glcttt">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="3260" y="450" />
+        <di:waypoint x="3260" y="430" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_1b1higb" dmnElementRef="InformationRequirement_19qskic">
+        <di:waypoint x="3260" y="350" />
+        <di:waypoint x="3260" y="190" />
+        <di:waypoint x="2074" y="180" />
+        <di:waypoint x="2074" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_09nokis" dmnElementRef="Decision_1gcp31w">
+        <dc:Bounds height="80" width="180" x="3500" y="350" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0pq3kl3" dmnElementRef="InformationRequirement_0kl5rsj">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="3590" y="450" />
+        <di:waypoint x="3590" y="430" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_1tad05m" dmnElementRef="InformationRequirement_1v2bf6z">
+        <di:waypoint x="3590" y="350" />
+        <di:waypoint x="3590" y="160" />
+        <di:waypoint x="2086" y="180" />
+        <di:waypoint x="2086" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_1j6erl8" dmnElementRef="Decision_14yfnoo">
+        <dc:Bounds height="80" width="180" x="3790" y="350" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_12zro6c" dmnElementRef="InformationRequirement_1nvz8xp">
+        <di:waypoint x="2010" y="450" />
+        <di:waypoint x="3880" y="450" />
+        <di:waypoint x="3880" y="430" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_158qq1m" dmnElementRef="InformationRequirement_1gbgkgw">
+        <di:waypoint x="3880" y="350" />
+        <di:waypoint x="3880" y="160" />
+        <di:waypoint x="2098" y="180" />
+        <di:waypoint x="2098" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0c6h0li" dmnElementRef="InformationRequirement_1sswvme">
+        <di:waypoint x="2020" y="80" />
+        <di:waypoint x="2020" y="10" />
+        <di:waypoint x="2020" y="-10" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_10dxmlh" dmnElementRef="Decision_09a2b47">
+        <dc:Bounds height="80" width="180" x="1930" y="-90" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

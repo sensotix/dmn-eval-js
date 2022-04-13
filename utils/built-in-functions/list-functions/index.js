@@ -115,13 +115,12 @@ const append = (list, element) => {
   }
 };
 
-const concatenate = (...args) =>
-  args.reduce((result, next) => {
-    if (Array.isArray(next)) {
-      return Array.prototype.concat(result, next);
-    }
-    return result;
-  }, []);
+const concatenate = (...args) => args.reduce((result, next) => {
+  if (Array.isArray(next)) {
+    return Array.prototype.concat(result, next);
+  }
+  return result;
+}, []);
 
 const insertBefore = (list, position, newItem) => {
   if (list === undefined || list === null) {

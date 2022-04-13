@@ -6,11 +6,12 @@
 */
 
 const dateTime = require('./date-time-functions');
-const list = require('./list-functions');
+// const list = require('./list-functions');
 const boolean = require('./boolean-functions');
 const defined = require('./defined');
 const string = require('./string-functions');
+const numeric = require('./numeric-functions');
 
 module.exports = {
-  ...dateTime, ...list, ...boolean, ...defined, ...string,
+  ...dateTime, ...numeric, ...boolean, ...defined, ...string,
 };
