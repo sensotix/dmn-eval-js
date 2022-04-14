@@ -1282,7 +1282,7 @@
           <text></text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0uafluy">
-          <text>max(30,7)</text>
+          <text>abs(-decimal(product(max(3,3,10,2),sum(floor(5.123),1)),2))</text>
         </outputEntry>
       </rule>
     </decisionTable>
